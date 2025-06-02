@@ -59,8 +59,8 @@ Pour déployer l'application sur un serveur de production :
 
 ```bash
 # Sur le serveur
-git clone https://github.com/VOTRE_USERNAME/trouvetonpadel.git
-cd trouvetonpadel
+git clone https://github.com/trouveunpadel/trouvetonpadelv2.git
+cd trouvetonpadelv2
 npm install --production
 
 # Configurer les variables d'environnement
@@ -75,3 +75,29 @@ pm2 startup
 ```
 
 Le site sera accessible sur le port 3000 par défaut.
+
+### GitHub
+
+Le code source est hébergé sur GitHub à l'adresse suivante :
+https://github.com/trouveunpadel/trouvetonpadelv2
+
+Pour pousser des modifications vers GitHub depuis votre machine locale :
+
+```bash
+# Configuration initiale (une seule fois)
+git config --global user.name "Votre Nom"
+git config --global user.email "votre.email@exemple.com"
+
+# Cloner le dépôt
+git clone https://github.com/trouveunpadel/trouvetonpadelv2.git
+cd trouvetonpadelv2
+
+# Faire des modifications...
+
+# Ajouter et commiter les modifications
+git add .
+git commit -m "Description des modifications"
+
+# Pousser vers GitHub
+git push origin main
+```
