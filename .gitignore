@@ -1,0 +1,38 @@
+# Dépendances
+/node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Variables d'environnement
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Répertoires de build
+/dist
+/build
+
+# Fichiers de cache
+.cache/
+.npm/
+.eslintcache
+
+# Fichiers d'IDE
+.idea/
+.vscode/
+*.swp
+*.swo

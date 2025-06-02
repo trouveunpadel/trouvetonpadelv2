@@ -1,0 +1,54 @@
+/**
+ * Configuration centralisée des clubs de padel pour le frontend
+ * Ce fichier contient toutes les informations sur les clubs (coordonnées, adresses, etc.)
+ * pour éviter la duplication et faciliter la maintenance
+ */
+
+window.clubsConfig = {
+  monkeypadel: {
+    id: 'monkeypadel',
+    name: 'The Monkey Padel',
+    latitude: 43.64458478670538,
+    longitude: 5.163387292364317,
+    address: 'Route de Salon, 13116 Vernègues',
+    type: 'extérieur',
+    courtType: 'extérieur'
+  },
+  complexepadel: {
+    id: 'complexepadel',
+    name: 'Le Complexe Padel',
+    latitude: 43.63111698073711,
+    longitude: 5.096043339977537,
+    address: 'Salon-de-Provence',
+    type: 'extérieur',
+    courtType: 'extérieur'
+  },
+  p4padelindoor: {
+    id: 'p4padelindoor',
+    name: 'P4 Padel Indoor',
+    latitude: 43.5865781080817,
+    longitude: 5.109412766870975,
+    address: 'ZI les sardenas, 133 Allée de la carreto LOT A, 13680 Lançon-Provence',
+    type: 'intérieur',
+    courtType: 'intérieur'
+  },
+  enjoypadel: {
+    id: 'enjoypadel',
+    name: 'Enjoy Padel',
+    latitude: 43.581236750376625,
+    longitude: 5.210554114062894,
+    address: '200 Rue des Oliviers, 13680 Lançon-Provence',
+    type: 'extérieur',
+    courtType: 'extérieur'
+  },
+  padelgentle: {
+    id: 'padelgentle',
+    name: 'Padel Gentle',
+    latitude: 43.60544814765865,
+    longitude: 5.098444841051269,
+    address: 'Quartier de la Garenne, RN 113, 13300 Salon-de-Provence, France',
+    type: 'extérieur',
+    courtType: 'extérieur'
+  }
+  // Ajouter d'autres clubs ici
+};

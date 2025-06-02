@@ -1,0 +1,22 @@
+{
+  "complexepadel": {
+    "working": true,
+    "lastCheck": "2025-06-02T11:01:26.346Z",
+    "errorCount": 0
+  },
+  "monkeypadel": {
+    "working": true,
+    "lastCheck": "2025-06-02T11:01:26.347Z",
+    "errorCount": 0
+  },
+  "p4": {
+    "working": true,
+    "lastCheck": "2025-06-02T11:01:29.368Z",
+    "errorCount": 0
+  },
+  "weather": {
+    "working": true,
+    "lastCheck": "2025-06-02T11:01:29.588Z",
+    "errorCount": 0
+  }
+}

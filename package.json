@@ -1,0 +1,36 @@
+{
+  "name": "trouvetonpadel",
+  "version": "1.0.0",
+  "description": "Application pour trouver des créneaux de padel disponibles dans différents clubs",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^5.1.0",
+    "http-proxy": "^1.18.1",
+    "http-proxy-middleware": "^3.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VOTRE_USERNAME/trouvetonpadel.git"
+  },
+  "keywords": [
+    "padel",
+    "reservation",
+    "sport"
+  ],
+  "author": "",
+  "license": "ISC"
+}

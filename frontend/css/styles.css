@@ -1,0 +1,388 @@
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: #f8f9fa;
+  --text-color: #212529;
+  --border-color: #dee2e6;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Styles pour la navbar avec effet de flou */
+.navbar-modern {
+  /* Styles de base qui seront surchargés par les thèmes */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+  background-color: white;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-color);
+}
+
+.beta-tag {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.hero {
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.text-white {
+  color: rgb(0, 0, 0) !important;
+}
+
+.text-muted {
+  color: #fff !important;
+}
+
+/* Styles pour la carte avec effet de retournement */
+.card-container {
+  perspective: 1000px;
+  max-width: 600px;
+  margin: 0 auto;
+  height: 670px; /* Hauteur augmentée pour voir le bouton */
+  overflow: hidden; /* Empêche le défilement à l'intérieur */
+  position: relative; /* Assure que le contenu reste fixe */
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem; /* Réduction du padding pour optimiser l'espace */
+  overflow: hidden; /* Empêche tout défilement dans la carte */
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+.card-flip-container {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.flip-button {
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.flip-button:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.search-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem; /* Réduction de l'espace entre les groupes de formulaire */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.3rem; /* Réduction de l'espace sous les labels */
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.range-slider {
+  width: 100%;
+  margin-top: 0.5rem; /* Réduction de l'espace au-dessus du slider */
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.search-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.search-button:hover {
+  background-color: #333;
+}
+
+.features {
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.features-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.features-subtitle {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  margin-bottom: 3rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  padding: 1.5rem;
+}
+
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.feature-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature-description {
+  color: var(--secondary-color);
+}
+
+/* Styles pour les résultats de recherche - Design minimaliste moderne avec Bootstrap */
+.results-container {
+  max-width: 900px;
+  margin: 2rem auto;
+}
+
+/* Personnalisation des cartes de créneaux */
+.slot-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 0.5rem !important;
+}
+
+.slot-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08) !important;
+  z-index: 1;
+}
+
+/* Personnalisation des sections d'heure */
+.time-section {
+  position: relative;
+}
+
+.time-section .bg-light {
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Badge de distance */
+.badge.bg-light {
+  background-color: #f0f0f0 !important;
+  font-weight: 500;
+}
+
+/* Badge de nombre de créneaux */
+.badge.bg-primary {
+  background-color: #C6FF00 !important;
+  color:#000;
+  font-weight: 500;
+}
+
+/* Styles pour la barre de périmètre */
+.form-range::-webkit-slider-thumb {
+  background-color: #C6FF00 !important;
+}
+
+.form-range::-moz-range-thumb {
+  background-color: #C6FF00 !important;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  background-color: rgba(198, 255, 0, 0.2) !important;
+}
+
+.form-range::-moz-range-track {
+  background-color: rgba(198, 255, 0, 0.2) !important;
+}
+
+/* Style pour le toggle */
+.form-check-input:checked {
+  background-color: #C6FF00 !important;
+  border-color: #C6FF00 !important;
+}
+
+/* Style pour le toggle non sélectionné */
+.form-check-input {
+  background-color: #333 !important;
+  border-color: #444 !important;
+}
+
+.form-check-input:focus {
+  border-color: #C6FF00 !important;
+  box-shadow: 0 0 0 0.25rem rgba(198, 255, 0, 0.25) !important;
+}
+
+/* Style pour le rond dans le toggle */
+.form-switch .form-check-input:checked::before,
+.form-switch .form-check-input:checked::after {
+  background-color: #000 !important;
+}
+
+.form-switch .form-check-input:checked {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23000'/%3e%3c/svg%3e") !important;
+}
+
+.form-switch .form-check-input {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e") !important;
+}
+
+/* Animations et transitions */
+.card {
+  transition: all 0.3s ease;
+}
+
+/* Styles pour les états de chargement et d'erreur */
+.loading {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+/* Personnalisation des icônes */
+.bi {
+  vertical-align: -0.125em;
+}
+
+/* Optimisations pour mobile */
+@media (max-width: 768px) {
+  .results-container {
+    margin: 1rem auto;
+  }
+  
+  .card-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .search-card {
+    padding: 1.5rem;
+  }
+  
+  .slots-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .results-container {
+    padding: 1rem;
+  }
+}

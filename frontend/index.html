@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrouveTonPadel - Trouve ton créneau de padel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/results.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/toggle-switch.css">
+    <link rel="stylesheet" href="css/theme-switcher.css">
+    <!-- Les styles ont été déplacés vers theme-switcher.css -->
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-modern fixed-top">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <a href="index.html" class="navbar-brand">
+                        <img src="images/logo/logo_white.png" alt="TrouveTonPadel" height="40">
+                    </a>
+                    <div class="d-flex align-items-center">
+                        <div class="theme-switcher">
+                            <span class="theme-switcher-icon moon"><i class="bi bi-moon-fill"></i></span>
+                            <label class="theme-switcher-toggle">
+                                <input type="checkbox" id="theme-switcher">
+                                <span class="theme-switcher-slider"></span>
+                            </label>
+                            <span class="theme-switcher-icon sun"><i class="bi bi-sun-fill"></i></span>
+                        </div>
+                        <span class="badge bg-primary ms-3">Beta</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section avec fond dégradé -->
+        <section class="hero">
+            <div class="container py-5">
+                <div class="row justify-content-center text-center mb-5">
+                    <div class="col-lg-8">
+                        <h1 class="display-4 fw-bold mb-3" style="color: #C6FF00;">Trouve ton créneau de padel</h1>
+                        <p class="lead mb-4 text-light">Recherche instantanée des créneaux disponibles dans tous les clubs de ta région. Simple, rapide, efficace.</p>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-lg-5 col-md-7">
+                        <div class="card shadow border-0 rounded-4 overflow-hidden">
+                            <div class="card-body p-0">
+                                <!-- Onglets pour basculer entre les recherches -->
+                                <ul class="nav nav-tabs nav-fill" id="searchTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active py-3" id="slots-tab" data-bs-toggle="tab" data-bs-target="#slots-search" type="button" role="tab" aria-selected="true">
+                                            <i class="bi bi-calendar-check me-2"></i>Rechercher un créneau
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link py-3" id="tournaments-tab" data-bs-toggle="tab" data-bs-target="#tournaments-search" type="button" role="tab" aria-selected="false">
+                                            <i class="bi bi-trophy me-2"></i>Rechercher un tournoi
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <!-- Contenu des onglets -->
+                                <div class="tab-content p-4" id="searchTabsContent">
+                                    <!-- Recherche de créneaux -->
+                                    <div class="tab-pane fade show active" id="slots-search" role="tabpanel">
+                                        <form id="search-form" class="needs-validation" novalidate onsubmit="return validateAndSubmitForm(event);">
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label for="date" class="form-label">Date</label>
+                                                    <input type="date" id="date" class="form-control" required>
+                                                    <div class="invalid-feedback">Veuillez choisir une date</div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label for="time" class="form-label">Heure minimum</label>
+                                                    <input type="time" id="time" class="form-control" required>
+                                                    <div class="invalid-feedback">Veuillez choisir une heure</div>
+                                                </div>
+
+                                                <div class="col-12 mb-3">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <label class="form-check-label fw-bold" for="use-location-toggle">Utiliser ma position actuelle</label>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" id="use-location-toggle" style="transform: scale(1.6); margin-left: 0.5rem;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-12" id="city-input-container">
+                                                    <label for="city" class="form-label">Ville</label>
+                                                    <input type="text" id="city" class="form-control" placeholder="Marseille, Aix-en-Provence..." required>
+                                                    <div class="invalid-feedback">Veuillez entrer une ville</div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label for="radius" class="form-label">Rayon: <span id="radius-value" class="fw-bold">20</span> km</label>
+                                                    <input type="range" id="radius" class="form-range" min="5" max="50" step="5" value="20">
+                                                    <div class="d-flex justify-content-between small text-muted">
+                                                        <span>5 km</span>
+                                                        <span>50 km</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 mt-4">
+                                                    <button type="submit" class="btn btn-primary w-100">
+                                                        <i class="bi bi-search me-2"></i>Rechercher
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <!-- Recherche de tournois -->
+                                    <div class="tab-pane fade" id="tournaments-search" role="tabpanel">
+                                        <form id="tournament-form" class="needs-validation" novalidate>
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label for="start-date" class="form-label">Date de début</label>
+                                                    <input type="date" id="start-date" class="form-control" required>
+                                                    <div class="invalid-feedback">Veuillez choisir une date de début</div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label for="end-date" class="form-label">Date de fin</label>
+                                                    <input type="date" id="end-date" class="form-control" required>
+                                                    <div class="invalid-feedback">Veuillez choisir une date de fin</div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label for="tournament-city" class="form-label">Ville</label>
+                                                    <input type="text" id="tournament-city" class="form-control" placeholder="Marseille, Aix-en-Provence..." required>
+                                                    <div class="invalid-feedback">Veuillez entrer une ville</div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label for="tournament-radius" class="form-label">Rayon: <span id="tournament-radius-value" class="fw-bold">20</span> km</label>
+                                                    <input type="range" id="tournament-radius" class="form-range" min="5" max="50" step="5" value="20">
+                                                    <div class="d-flex justify-content-between small text-muted">
+                                                        <span>5 km</span>
+                                                        <span>50 km</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 mt-4">
+                                                    <button type="submit" class="btn btn-primary w-100">
+                                                        <i class="bi bi-search me-2"></i>Rechercher
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section des résultats de recherche -->
+        <section id="results-section" class="results-section" style="display: none;">
+            <div class="container">
+                <div class="results-header-main">
+                    <h2>Résultats de votre recherche</h2>
+                    <button id="back-to-search" class="btn btn-outline-primary">Nouvelle recherche</button>
+                </div>
+                <div id="result-count" class="result-count"></div>
+                <div id="results-container" class="results-container"></div>
+            </div>
+        </section>
+
+        <!-- Section des fonctionnalités avec des icônes Bootstrap -->
+        <section class="features py-5 bg-light">
+            <div class="container py-4">
+                <div class="row text-center mb-5">
+                    <div class="col-12">
+                        <h2 class="display-5 fw-bold mb-3">Simple. Rapide. Efficace.</h2>
+                        <p class="lead text-muted">Tout ce dont tu as besoin pour trouver ton créneau parfait</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon-wrapper mb-4">
+                                    <div class="feature-icon-bg bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                        <i class="bi bi-lightning-charge-fill fs-1"></i>
+                                    </div>
+                                </div>
+                                <h3 class="card-title h4 mb-3">Recherche instantanée</h3>
+                                <p class="card-text text-muted">Résultats en temps réel de tous les clubs de ta région en quelques secondes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon-wrapper mb-4">
+                                    <div class="feature-icon-bg bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                        <i class="bi bi-bullseye fs-1"></i>
+                                    </div>
+                                </div>
+                                <h3 class="card-title h4 mb-3">Filtres précis</h3>
+                                <p class="card-text text-muted">Trouve exactement ce que tu cherches : heure, type de terrain, distance.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon-wrapper mb-4">
+                                    <div class="feature-icon-bg bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                        <i class="bi bi-phone fs-1"></i>
+                                    </div>
+                                </div>
+                                <h3 class="card-title h4 mb-3">Mobile-first</h3>
+                                <p class="card-text text-muted">Interface optimisée pour tous les appareils. Recherche partout, tout le temps.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer py-2 bg-black border-top border-dark">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <span class="text-muted small">© 2025 TrouveTonPadel</span>
+                </div>
+                <div>
+                    <a href="#" class="text-decoration-none ms-3"><i class="bi bi-instagram text-light"></i></a>
+                    <a href="#" class="text-decoration-none ms-3"><i class="bi bi-facebook text-light"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/proxy-client.js"></script>
+    <!-- Scripts modulaires - Ordre important pour les dépendances -->
+    <script src="js/location-service-new.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/form-validation.js"></script>
+    <script src="js/clubs-config.js"></script>
+    <script src="js/results-display.js"></script>
+    <script src="js/location-toggle.js"></script>
+    <script src="js/theme-switcher.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/time-selector.js"></script>
+</body>
+</html>
