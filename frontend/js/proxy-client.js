@@ -115,58 +115,76 @@ class TrouveTonPadelProxy {
             timeout = this.config.timeout
         } = options;
         
+        console.log(`Requête API: ${method} ${endpoint}`);
+        
         // S'assurer que l'endpoint commence par /
         const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
         
         // Construire l'URL complète selon le mode
-        let url;
-        
-        switch (this.config.mode) {
-            case 'iframe':
-                // En mode iframe, l'URL est celle du backend
-                url = `${this.config.backendUrl}/api${normalizedEndpoint}`;
-                break;
-                
-            case 'server':
-                // En mode serveur, l'URL est celle du serveur proxy
-                url = `${this.config.proxyServerUrl}/api${normalizedEndpoint}`;
-                break;
-                
-            case 'direct':
-            default:
-                // En mode direct, l'URL est celle du backend
-                url = `${this.config.backendUrl}/api${normalizedEndpoint}`;
-                break;
-        }
-        
-        // Journaliser la requête
-        this.config.logger(`Requête API: ${method} ${url}`);
-        
-        // En mode iframe, utiliser l'iframe pour la requête
-        if (this.config.mode === 'iframe') {
-            return this.requestViaIframe(url, method, body, headers, timeout);
-        }
-        
-        // En mode serveur ou direct, utiliser fetch
         try {
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...headers
-                },
-                body: body ? JSON.stringify(body) : undefined,
-                cache: 'no-store'
-            });
+            // Déterminer l'URL de base à utiliser
+            let baseUrl = this.config.backendUrl;
             
-            // Vérifier si la réponse est OK
-            const data = await response.json();
+            // Si nous sommes dans un environnement de prévisualisation (comme Cascade)
+            const isPreviewEnvironment = window.location.href.includes('127.0.0.1');
+            if (isPreviewEnvironment) {
+                console.log('Environnement de prévisualisation détecté, adaptation des URLs');
+                // Utiliser l'URL actuelle comme base pour éviter les problèmes CORS
+                baseUrl = window.location.origin;
+            }
             
-            return {
-                ok: response.ok,
-                status: response.status,
-                data
-            };
+            console.log(`URL de base utilisée: ${baseUrl}`);
+            
+            // Selon le mode, utiliser la méthode appropriée
+            if (this.config.mode === 'iframe') {
+                // Utiliser l'iframe comme proxy
+                const url = `${baseUrl}/api${normalizedEndpoint}`;
+                console.log(`Requête via iframe: ${url}`);
+                return this.requestViaIframe(url, method, body, headers, timeout);
+            } else if (this.config.mode === 'server') {
+                // Utiliser le serveur proxy
+                const url = `${this.config.proxyServerUrl}/proxy?url=${encodeURIComponent(`${baseUrl}/api${normalizedEndpoint}`)}`;
+                console.log(`Requête via serveur proxy: ${url}`);
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...headers
+                    },
+                    body: body ? JSON.stringify(body) : undefined
+                });
+                
+                // Vérifier si la réponse est OK
+                const data = await response.json();
+                
+                return {
+                    ok: response.ok,
+                    status: response.status,
+                    data
+                };
+            } else {
+                // Mode direct: utiliser fetch directement
+                const url = `${baseUrl}/api${normalizedEndpoint}`;
+                console.log(`Requête directe: ${url}`);
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...headers
+                    },
+                    body: body ? JSON.stringify(body) : undefined,
+                    cache: 'no-store'
+                });
+                
+                // Vérifier si la réponse est OK
+                const data = await response.json();
+                
+                return {
+                    ok: response.ok,
+                    status: response.status,
+                    data
+                };
+            }
         } catch (error) {
             this.config.logger(`Erreur lors de la requête API: ${error.message}`);
             throw error;
