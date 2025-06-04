@@ -14,6 +14,7 @@ const p4PadelIndoor = require('./clubs/p4');
 const enjoyPadel = require('./clubs/enjoypadel');
 const padelGentle = require('./clubs/padelgentle');
 const padelTwins = require('./clubs/padeltwins');
+const countryClubPadel = require('./clubs/countryclubpadel');
 // Ajouter d'autres clubs ici au fur et à mesure
 
 /**
@@ -70,6 +71,10 @@ const clubs = [
   {
     ...clubsConfig.padeltwins,
     module: padelTwins
+  },
+  {
+    ...clubsConfig.countryclubpadel,
+    module: countryClubPadel
   }
   // Ajouter d'autres clubs ici
 ];
@@ -223,6 +228,18 @@ async function searchAvailableSlots(dateStr, startHour, endHour, latitude, longi
           console.error(`Erreur spécifique lors de la recherche pour Padel Twins:`, padelTwinsError);
           slots = []; // Assurer que slots est un tableau vide en cas d'erreur
         }
+      } else if (club.id === 'countryclubpadel') {
+        try {
+          // Recherche de créneaux pour Country Club Padel
+          console.log(`Recherche de créneaux pour Country Club Padel à la date ${dateStr}...`);
+          const [ccYear, ccMonth, ccDay] = dateStr.split('-');
+          const countryClubPadelDateStr = `${ccMonth}/${ccDay}/${ccYear}`;
+          slots = await club.module.findAvailableSlots(countryClubPadelDateStr, `${startHour}:00`);
+          console.log(`Country Club Padel: ${slots.length} créneaux trouvés`);
+        } catch (countryClubPadelError) {
+          console.error(`Erreur spécifique lors de la recherche pour Country Club Padel:`, countryClubPadelError);
+          slots = []; // Assurer que slots est un tableau vide en cas d'erreur
+        }
       }
       // Ajouter d'autres clubs ici avec leur format de date spécifique
       
@@ -270,10 +287,26 @@ async function searchAvailableSlots(dateStr, startHour, endHour, latitude, longi
           enhancedSlot.type = club.id === 'complexepadel' ? 'intérieur' : 'non spécifié';
         }
         
-        // S'assurer que courtType est correctement défini (pour uniformiser entre MonkeyPadel et ComplexePadel)
+        // S'assurer que courtType est correctement défini (pour uniformiser entre les clubs)
         if (!enhancedSlot.courtType || enhancedSlot.courtType === '') {
           // Si courtType n'existe pas mais que type existe, utiliser type
-          enhancedSlot.courtType = enhancedSlot.type || (club.id === 'complexepadel' ? 'intérieur' : 'non spécifié');
+          if (club.id === 'countryclubpadel') {
+            // Pour Country Club Padel, forcer le type de terrain en fonction du nom du court
+            const courtName = slot.court ? slot.court.toLowerCase() : '';
+            if (courtName.includes('1') || courtName.includes('2') || 
+                courtName.includes('couvert') || courtName.includes('intérieur')) {
+              enhancedSlot.courtType = 'intérieur';
+              console.log(`Country Club Padel: Court ${slot.court} -> Type forcé: intérieur`);
+            } else if (courtName.includes('3') || courtName.includes('4') || 
+                     courtName.includes('extérieur')) {
+              enhancedSlot.courtType = 'extérieur';
+              console.log(`Country Club Padel: Court ${slot.court} -> Type forcé: extérieur`);
+            } else {
+              enhancedSlot.courtType = slot.courtType || 'non spécifié';
+            }
+          } else {
+            enhancedSlot.courtType = enhancedSlot.type || (club.id === 'complexepadel' ? 'intérieur' : 'non spécifié');
+          }
         } else if (enhancedSlot.courtType && !enhancedSlot.type) {
           // Si type n'existe pas mais que courtType existe, utiliser courtType
           enhancedSlot.type = enhancedSlot.courtType;
