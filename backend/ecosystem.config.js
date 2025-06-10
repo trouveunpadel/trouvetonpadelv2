@@ -41,6 +41,20 @@ module.exports = {
       env_production: {
         NODE_ENV: 'production'
       }
+    },
+    {
+      name: 'monkeypadel-cookie-check',
+      script: './clubs/monkeypadel/check-cookies-daily.js',
+      instances: 1,
+      autorestart: false,
+      watch: false,
+      cron_restart: '0 8 * * *', // Exécuter tous les jours à 8h du matin
+      env: {
+        NODE_ENV: 'development'
+      },
+      env_production: {
+        NODE_ENV: 'production'
+      }
     }
   ]
 };
