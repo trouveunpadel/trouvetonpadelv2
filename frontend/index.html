@@ -9,10 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/results.css">
-    <link rel="stylesheet" href="css/modal.css">
-    <link rel="stylesheet" href="css/toggle-switch.css">
-    <link rel="stylesheet" href="css/theme-switcher.css">
-    <!-- Les styles ont été déplacés vers theme-switcher.css -->
+    <link rel="stylesheet" href="css/ui-components.css">
+    <!-- Les fichiers modal.css, toggle-switch.css et theme-switcher.css ont été fusionnés dans ui-components.css -->
 </head>
 <body>
     <header>
@@ -252,15 +250,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/proxy-client.js"></script>
     <!-- Scripts modulaires - Ordre important pour les dépendances -->
-    <script src="js/location-service-new.js"></script>
-    <script src="js/modal.js"></script>
+    <script src="js/location-services.js"></script>
+    <script src="js/ui-components.js"></script>
     <script src="js/form-validation.js"></script>
     <script src="js/clubs-config.js"></script>
     <script src="js/results-display.js"></script>
-    <script src="js/location-toggle.js"></script>
-    <script src="js/theme-switcher.js"></script>
-    <script src="js/ui.js"></script>
     <script src="js/search.js"></script>
     <script src="js/time-selector.js"></script>
+    <!-- Les fichiers JS ont été fusionnés :
+         - location-service-new.js + location-toggle.js -> location-services.js
+         - modal.js + theme-switcher.js + ui.js -> ui-components.js -->
 </body>
 </html>
