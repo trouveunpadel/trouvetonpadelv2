@@ -1,9 +1,0 @@
-http://127.0.0.1:60705/
-
-lance le site stp le backend et frontend oublie pas j utilise proxy-client.js dans le fichier js et server.js et si des port son utiliser etein les pour les lancer sur ce port 		Pront de demarrage
-
-
-Truc a lancer :
-node backend/start-monitoring.js		regarde qu il y est pas d erreur
-pm2 start ecosystem.config.js			pour lancer tout les script de fond
-node check-cookies-daily.js			refresh cookie monkey padel
