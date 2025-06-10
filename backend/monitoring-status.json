@@ -1,47 +1,42 @@
 {
   "complexepadel": {
     "working": true,
-    "lastCheck": "2025-06-04T14:23:23.361Z",
+    "lastCheck": "2025-06-10T12:23:58.354Z",
     "errorCount": 0
   },
   "countryclubpadel": {
-    "working": false,
-    "lastCheck": "2025-06-04T14:23:23.515Z",
-    "errorCount": 1
+    "working": true,
+    "lastCheck": "2025-06-10T12:23:58.426Z",
+    "errorCount": 0
   },
   "enjoypadel": {
-    "working": false,
-    "lastCheck": "2025-06-04T14:23:23.515Z",
-    "errorCount": 1
+    "working": true,
+    "lastCheck": "2025-06-10T12:23:58.841Z",
+    "errorCount": 0
   },
   "monkeypadel": {
     "working": true,
-    "lastCheck": "2025-06-04T14:23:23.518Z",
+    "lastCheck": "2025-06-10T12:23:58.843Z",
     "errorCount": 0
   },
   "p4": {
     "working": true,
-    "lastCheck": "2025-06-04T14:23:26.546Z",
+    "lastCheck": "2025-06-10T12:24:01.187Z",
     "errorCount": 0
   },
   "padelgentle": {
     "working": true,
-    "lastCheck": "2025-06-04T14:23:26.790Z",
+    "lastCheck": "2025-06-10T12:24:01.295Z",
     "errorCount": 0
   },
   "padeltwins": {
     "working": true,
-    "lastCheck": "2025-06-04T14:23:27.564Z",
-    "errorCount": 0
-  },
-  "z5istre": {
-    "working": true,
-    "lastCheck": "2025-06-04T14:23:37.177Z",
+    "lastCheck": "2025-06-10T12:24:01.794Z",
     "errorCount": 0
   },
   "weather": {
     "working": true,
-    "lastCheck": "2025-06-04T14:23:37.391Z",
+    "lastCheck": "2025-06-10T12:24:01.794Z",
     "errorCount": 0
   }
 }
