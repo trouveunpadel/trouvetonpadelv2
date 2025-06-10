@@ -33,6 +33,11 @@ yarn-error.log*
 .cache/
 .npm/
 .eslintcache
+*/*/cookies-cache.json
+backend/clubs/*/cookies-cache.json
+
+# Sauvegardes
+frontend/backup/
 
 # Fichiers d'IDE
 .idea/
