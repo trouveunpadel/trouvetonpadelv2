@@ -1,0 +1,56 @@
+# Liste des fichiers frontend inutilisés ou obsolètes
+
+## Fichiers déjà supprimés
+1. frontend/js/weather-display-fix.js
+   - Fichier vide (0 octet)
+   - Non référencé dans les pages HTML
+   - Aucune fonctionnalité
+
+2. frontend/css/mobile-header.css
+   - Non inclus dans les pages HTML
+   - Fonctionnalités probablement intégrées dans styles.css
+
+3. frontend/css/mobile-slots-navigation.css
+   - Non inclus dans les pages HTML
+   - Fonctionnalités probablement intégrées dans styles.css ou results.css
+
+4. frontend/css/toggle-switch.css
+   - Bien que référencé dans index.html, ses fonctionnalités semblent être dupliquées dans theme-switcher.css
+   - Le commentaire "Les styles ont été déplacés vers theme-switcher.css" confirme cette hypothèse
+
+## Fichiers référencés mais potentiellement redondants
+1. frontend/js/location-toggle.js
+   - Référencé dans index.html mais pas dans results.html
+   - Fonctionnalités liées uniquement à la page d'accueil (toggle de géolocalisation)
+   - Pourrait être fusionné avec location-service-new.js pour simplifier la structure
+
+
+## Fichiers potentiellement à optimiser
+
+1. frontend/js/weather-service.js
+   - Contient une clé API OpenWeatherMap exposée en clair dans le frontend
+   - Recommandation : déplacer cette logique vers le backend pour sécuriser la clé API
+
+2. frontend/js/location-service-new.js
+   - Le nom suggère qu'il s'agit d'une nouvelle version
+   - Vérifier s'il existe d'anciennes versions non supprimées dans le code
+
+## Optimisations recommandées
+
+1. Consolidation des fichiers CSS
+   - Plusieurs petits fichiers CSS pourraient être regroupés pour réduire les requêtes HTTP
+   - Par exemple : theme-switcher.css et weather.css pourraient être fusionnés
+
+2. Modernisation de la gestion des dépendances
+   - Le frontend utilise des balises script directes sans système de modules
+   - Envisager d'utiliser un bundler comme Webpack ou Vite pour une meilleure organisation
+
+3. Optimisation des images
+   - Vérifier si toutes les images dans images/clubs/ sont utilisées
+   - Compresser les images pour améliorer les performances
+
+## Prochaines étapes recommandées
+
+1. Commiter les suppressions de fichiers inutilisés
+2. Vérifier que les fonctionnalités du site fonctionnent correctement après ces suppressions
+3. Envisager une refactorisation progressive du frontend pour améliorer la maintenabilité
