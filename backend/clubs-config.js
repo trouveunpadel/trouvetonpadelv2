@@ -58,6 +58,15 @@ const clubsConfig = {
     address: '1050 Rte de Velaux, 13111 Coudoux',
     type: 'extérieur',
     courtType: 'extérieur'
+  },
+  countryclubpadel: {
+    id: 'countryclubpadel',
+    name: 'Country Club Padel',
+    latitude: 43.56886117433774,
+    longitude: 5.416675539201542,
+    address: '1195 Chem. des Cruyes, 13090 Aix-en-Provence',
+    type: 'mixte',
+    courtType: 'mixte'
   }
   // Ajouter d'autres clubs ici
 };

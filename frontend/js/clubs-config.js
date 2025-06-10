@@ -49,6 +49,15 @@ window.clubsConfig = {
     address: 'Quartier de la Garenne, RN 113, 13300 Salon-de-Provence, France',
     type: 'extérieur',
     courtType: 'extérieur'
+  },
+  countryclubpadel: {
+    id: 'countryclubpadel',
+    name: 'Country Club Padel',
+    latitude: 43.56886117433774,
+    longitude: 5.416675539201542,
+    address: '1195 Chem. des Cruyes, 13090 Aix-en-Provence',
+    type: 'mixte',
+    courtType: 'mixte'
   }
   // Ajouter d'autres clubs ici
 };
