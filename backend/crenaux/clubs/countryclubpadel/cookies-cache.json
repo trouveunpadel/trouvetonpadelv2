@@ -1,0 +1,90 @@
+{
+  "cookies": [
+    {
+      "name": "_ga_K7TTGZZ33T",
+      "value": "GS2.1.s1748963103$o1$g1$t1748963108$j55$l0$h0",
+      "domain": ".openresa.com",
+      "path": "/",
+      "expires": 1783523108.028527,
+      "size": 59,
+      "httpOnly": false,
+      "secure": false,
+      "session": false,
+      "sameParty": false,
+      "sourceScheme": "Secure",
+      "sourcePort": 443
+    },
+    {
+      "name": "bjdevice",
+      "value": "VEFWaEhDUDJ3OUp2WXZoODh1Tml6eVJtUVFNeUVhWTl5VkpMdjlSb01sLzE3Z1kvY1lId0JYaHMzRGxaZ2Jsa2RnSEJiYkIzanM4Kyt6UzYvTjRNQVBVbnlIYThHT0lsK1RSRkJxSU5yZlE9Ojq1zhHHqyozPdYA3yeo1MJk",
+      "domain": "openresa.com",
+      "path": "/",
+      "expires": 1780499106.925367,
+      "size": 176,
+      "httpOnly": true,
+      "secure": true,
+      "session": false,
+      "sameParty": false,
+      "sourceScheme": "Secure",
+      "sourcePort": 443
+    },
+    {
+      "name": "bjid",
+      "value": "NW1Tc2w4RVZnSlZueU55Mk56QVJjVUNBczdUdnZKYURwUEZEVzF2MDNla012YXBEQjA0OGo4NjNVRDNQQkk4U2xoUXBGZ1JSdUdYSHBvSnJWVkhuSFp0aW5UNVE2eWh4cVp4dTRqMzg0b2M4Q0U1V1h4MjMyVkVjb01FaFNTeFI6OiEkieB8%2Fk%2B0sHCtr7cPcvI%3D",
+      "domain": "openresa.com",
+      "path": "/",
+      "expires": 1780499106.925356,
+      "size": 206,
+      "httpOnly": true,
+      "secure": true,
+      "session": false,
+      "sameParty": false,
+      "sourceScheme": "Secure",
+      "sourcePort": 443
+    },
+    {
+      "name": "BJSESSIONID",
+      "value": "qJx8FUe6qYNpxGAp2mTqISrGn07E0PdTEndFpYpt2PukM6Wx",
+      "domain": "openresa.com",
+      "path": "/",
+      "expires": -1,
+      "size": 59,
+      "httpOnly": true,
+      "secure": true,
+      "session": true,
+      "sameParty": false,
+      "sourceScheme": "Secure",
+      "sourcePort": 443
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.1551457776.1748963103",
+      "domain": ".openresa.com",
+      "path": "/",
+      "expires": 1783523107.115713,
+      "size": 30,
+      "httpOnly": false,
+      "secure": false,
+      "session": false,
+      "sameParty": false,
+      "sourceScheme": "Secure",
+      "sourcePort": 443
+    },
+    {
+      "name": "bjlanguage",
+      "value": "fr_FR",
+      "domain": "openresa.com",
+      "path": "/",
+      "expires": 1764515102.511759,
+      "size": 15,
+      "httpOnly": true,
+      "secure": true,
+      "session": false,
+      "sameParty": false,
+      "sourceScheme": "Secure",
+      "sourcePort": 443
+    }
+  ],
+  "expiresAt": 1751555109892,
+  "createdAt": 1748963109893
+}
