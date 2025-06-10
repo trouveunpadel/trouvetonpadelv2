@@ -23,6 +23,8 @@ function getClubImage(clubName) {
             return 'padel-gentle.jpg'; // Assurez-vous que cette image existe dans le dossier images/clubs/
         case 'Padel Twins':
             return 'padel-twins.jpg'; // Image du club Padel Twins
+        case 'Country Club Padel':
+            return 'country-club-padel.jpg'; // Image par défaut pour Country Club Padel
         case 'The Monkey Padel':
         default:
             return 'monkey-padel.jpg';
@@ -104,7 +106,8 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
                 "Le Complexe Padel": window.clubsConfig.complexepadel,
                 "P4 Padel Indoor": window.clubsConfig.p4padelindoor,
                 "Enjoy Padel": window.clubsConfig.enjoypadel,
-                "Padel Gentle": window.clubsConfig.padelgentle
+                "Padel Gentle": window.clubsConfig.padelgentle,
+                "Country Club Padel": window.clubsConfig.countryclubpadel
             };
             
             // Utiliser les coordonnées connues si disponibles, sinon utiliser celles fournies

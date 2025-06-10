@@ -134,21 +134,34 @@ function generateReservationInfo(slot) {
  * @returns {Array} - Liste des créneaux avec liens de réservation
  */
 function addReservationLinks(slots) {
+  // URL unique pour tous les créneaux du Monkey Padel
+  const uniqueMonkeyPadelUrl = 'https://openresa.com/club/themonkeypadel';
+  
   return slots.map(slot => {
     try {
+      // On garde les informations de réservation pour la compatibilité
       const reservationInfo = generateReservationInfo(slot);
+      
+      // Mais on remplace l'URL par l'URL unique demandée
       if (reservationInfo) {
         return {
           ...slot,
-          reservationInfo,
+          reservationInfo: {
+            ...reservationInfo,
+            directUrl: uniqueMonkeyPadelUrl,
+            redirectUrl: uniqueMonkeyPadelUrl
+          },
           // Ajouter la propriété reservationLink pour compatibilité avec le frontend
-          reservationLink: reservationInfo.directUrl
+          reservationLink: uniqueMonkeyPadelUrl
         };
       }
       return slot;
     } catch (error) {
       console.error(`Erreur lors de l'ajout du lien de réservation pour le créneau ${slot.time} sur ${slot.court}:`, error);
-      return slot;
+      return {
+        ...slot,
+        reservationLink: uniqueMonkeyPadelUrl // Même en cas d'erreur, on ajoute l'URL unique
+      };
     }
   });
 }

@@ -322,7 +322,10 @@ function extractSlotsFromResponse(response, date) {
       const endHours = (hours + Math.floor((minutes + duration) / 60)) % 24;
       const endTime = `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
       
-      // Ajouter le créneau à la liste
+      // URL unique pour tous les créneaux du P4 Padel Indoor
+      const uniqueP4Url = 'https://p4-padel-indoor.gestion-sports.com/membre/';
+      
+      // Ajouter le créneau à la liste avec l'URL unique
       allSlots.push({
         date,
         startTime: hour,
@@ -330,7 +333,7 @@ function extractSlotsFromResponse(response, date) {
         court: courtName,
         courtId: court.idCourt,
         price,
-        bookingUrl: `${BASE_URL}/membre/reservation.html?court=${court.idCourt}&date=${formatDateForApi(date)}&time=${hour}`
+        reservationLink: uniqueP4Url
       });
       
       console.log(`[DEBUG] Créneau ajouté: ${courtName} à ${hour}`);

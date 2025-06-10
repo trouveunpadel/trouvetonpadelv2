@@ -172,7 +172,8 @@ async function searchAvailableSlots(dateStr, startHour, endHour, latitude, longi
             price: slot.price || 0,
             type: 'intérieur',
             courtType: 'intérieur',
-            available: true
+            available: true,
+            reservationLink: slot.reservationLink || 'https://p4-padel-indoor.gestion-sports.com/membre/'
           }));
           
         } catch (p4Error) {

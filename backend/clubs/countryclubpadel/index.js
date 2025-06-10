@@ -346,6 +346,9 @@ function extractSlotsFromHtml($, date) {
           // Ajouter le créneau seulement si une heure ou un terrain (autre que 'Terrain non spécifié') est trouvé
           if (time || (court && court !== 'Terrain non spécifié')) {
             const slotDate = getSlotDate($slot); // Obtenir la date pour ce créneau
+            // URL unique pour tous les créneaux du Country Club Padel
+            const uniqueCountryClubPadelUrl = 'https://openresa.com/club/countryclubpadel';
+            
             const slotInfo = {
               club: 'Country Club Padel',
               date: slotDate,
@@ -353,7 +356,7 @@ function extractSlotsFromHtml($, date) {
               court: court || 'Terrain non spécifié',
               price: price, 
               duration: '1h30', 
-              url: slotId ? `https://openresa.com/reservation/book?slot=${slotId}` : 'URL non disponible'
+              reservationLink: uniqueCountryClubPadelUrl
             };
             
             availableSlots.push(slotInfo);
@@ -411,6 +414,9 @@ function extractSlotsFromHtml($, date) {
         // Obtenir la date correcte pour ce créneau
         const slotDate = getSlotDate($link);
         
+        // URL unique pour tous les créneaux du Country Club Padel
+        const uniqueCountryClubPadelUrl = 'https://openresa.com/club/countryclubpadel';
+        
         const slotInfo = {
           club: 'Country Club Padel',
           date: slotDate,
@@ -418,7 +424,7 @@ function extractSlotsFromHtml($, date) {
           court: court,
           price: 'Prix non spécifié',
           duration: '1h30',
-          url: href.startsWith('http') ? href : `https://openresa.com${href}`
+          reservationLink: uniqueCountryClubPadelUrl
         };
         
         availableSlots.push(slotInfo);
