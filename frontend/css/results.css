@@ -488,4 +488,122 @@ main {
         border-right: none;
         border-bottom: 1px solid var(--border);
     }
+    
+    /* Styles améliorés pour le header en mobile */
+    body {
+        padding-top: 85px; /* Réduction de l'espace entre le header et le contenu */
+    }
+    
+    .navbar-modern {
+        padding: 0;
+        background-color: #1a1a1a;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .navbar-modern .container {
+        padding: 0;
+    }
+    
+    /* Styles pour la partie supérieure du header mobile */
+    .mobile-header-top {
+        padding: 10px 15px;
+        width: 100%;
+    }
+    
+    .navbar-brand {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .navbar-brand img {
+        height: 36px;
+    }
+    
+    /* Séparateur entre les deux parties du header */
+    .mobile-header-separator {
+        height: 1px;
+        background-color: rgba(255, 255, 255, 0.1);
+        width: 100%;
+        margin: 0;
+    }
+    
+    /* Styles pour la partie inférieure du header mobile */
+    .mobile-header-bottom {
+        padding: 10px 15px;
+        width: 100%;
+    }
+    
+    .mobile-header-bottom h2 {
+        font-size: 1.1rem !important;
+        line-height: 1.2;
+        margin: 0;
+        font-weight: 500;
+        color: #fff;
+    }
+    
+    .theme-switcher {
+        transform: scale(0.85);
+        margin-right: 10px !important;
+    }
+    
+    .btn-sm.btn-outline-primary {
+        font-size: 0.65rem !important;
+        padding: 0.15rem 0.35rem !important;
+        margin-right: 8px !important;
+        border-width: 1px;
+        border-color: #C6FF00;
+        color: #C6FF00;
+        font-weight: 500;
+    }
+    
+    .btn-sm.btn-outline-primary:hover {
+        background-color: #C6FF00;
+        color: #1a1a1a;
+    }
+    
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.25em 0.5em;
+        background-color: #C6FF00;
+        color: #1a1a1a;
+    }
+}
+
+/* Ajustements spécifiques pour très petits écrans */
+@media (max-width: 400px) {
+    body {
+        padding-top: 80px;
+    }
+    
+    .mobile-header-top {
+        padding: 8px 12px;
+    }
+    
+    .navbar-brand img {
+        height: 30px;
+    }
+    
+    .mobile-header-bottom {
+        padding: 8px 12px;
+    }
+    
+    .mobile-header-bottom h2 {
+        font-size: 0.9rem !important;
+    }
+    
+    .theme-switcher {
+        transform: scale(0.75);
+        margin-right: 6px !important;
+    }
+    
+    .btn-sm.btn-outline-primary {
+        padding: 0.1rem 0.3rem !important;
+        font-size: 0.6rem !important;
+        margin-right: 6px !important;
+    }
+    
+    .badge {
+        font-size: 0.65rem;
+        padding: 0.2em 0.4em;
+    }
 }

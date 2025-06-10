@@ -16,7 +16,8 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-modern fixed-top">
             <div class="container">
-                <div class="d-flex justify-content-between align-items-center w-100">
+                <!-- Structure desktop inchangée -->
+                <div class="d-none d-lg-flex justify-content-between align-items-center w-100">
                     <div class="d-flex align-items-center">
                         <a href="index.html" class="navbar-brand me-3">
                             <img src="images/logo/logo_white.png" alt="TrouveTonPadel" height="40">
@@ -32,8 +33,38 @@
                             </label>
                             <span class="theme-switcher-icon sun"><i class="bi bi-sun-fill"></i></span>
                         </div>
-                        <a href="index.html" class="btn btn-sm btn-outline-primary me-2" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; font-weight: 400;">Nouvelle recherche</a>
+                        <a href="index.html" class="btn btn-sm btn-outline-primary me-2">Nouvelle recherche</a>
                         <span class="badge bg-primary">Beta</span>
+                    </div>
+                </div>
+                
+                <!-- Structure mobile optimisée -->
+                <div class="d-flex d-lg-none flex-column w-100">
+                    <!-- Ligne du haut: logo et switcher -->
+                    <div class="mobile-header-top d-flex justify-content-between align-items-center">
+                        <a href="index.html" class="navbar-brand">
+                            <img src="images/logo/logo_white.png" alt="TrouveTonPadel" height="36">
+                        </a>
+                        <div class="d-flex align-items-center">
+                            <div class="theme-switcher">
+                                <span class="theme-switcher-icon moon"><i class="bi bi-moon-fill"></i></span>
+                                <label class="theme-switcher-toggle">
+                                    <input type="checkbox" id="theme-switcher-mobile">
+                                    <span class="theme-switcher-slider"></span>
+                                </label>
+                                <span class="theme-switcher-icon sun"><i class="bi bi-sun-fill"></i></span>
+                            </div>
+                            <span class="badge bg-primary ms-2">Beta</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Séparateur -->
+                    <div class="mobile-header-separator"></div>
+                    
+                    <!-- Ligne du bas: titre et bouton -->
+                    <div class="mobile-header-bottom d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0 fs-5 text-light">Résultats</h2>
+                        <a href="index.html" class="btn btn-sm btn-outline-primary">Nouvelle recherche</a>
                     </div>
                 </div>
             </div>
