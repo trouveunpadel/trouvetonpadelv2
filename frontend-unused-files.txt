@@ -18,11 +18,41 @@
    - Bien que référencé dans index.html, ses fonctionnalités semblent être dupliquées dans theme-switcher.css
    - Le commentaire "Les styles ont été déplacés vers theme-switcher.css" confirme cette hypothèse
 
+## Fichiers fusionnés et supprimés
+1. frontend/css/theme-switcher.css
+   - Fusionné dans ui-components.css
+   - Supprimé après fusion
+
+2. frontend/css/weather.css
+   - Fusionné dans ui-components.css
+   - Supprimé après fusion
+
+3. frontend/css/modal.css
+   - Fusionné dans ui-components.css
+   - Supprimé après fusion
+
+4. frontend/js/theme-switcher.js
+   - Fusionné dans ui-components.js
+   - Supprimé après fusion
+
+5. frontend/js/ui.js
+   - Fusionné dans ui-components.js
+   - Supprimé après fusion
+
+6. frontend/js/modal.js
+   - Fusionné dans ui-components.js
+   - Supprimé après fusion
+
+7. frontend/js/location-service-new.js
+   - Fusionné dans location-services.js
+   - Supprimé après fusion
+
+8. frontend/js/location-toggle.js
+   - Fusionné dans location-services.js
+   - Supprimé après fusion
+
 ## Fichiers référencés mais potentiellement redondants
-1. frontend/js/location-toggle.js
-   - Référencé dans index.html mais pas dans results.html
-   - Fonctionnalités liées uniquement à la page d'accueil (toggle de géolocalisation)
-   - Pourrait être fusionné avec location-service-new.js pour simplifier la structure
+[Cette section a été traitée : les fichiers ont été fusionnés et supprimés]
 
 
 ## Fichiers potentiellement à optimiser
@@ -31,15 +61,11 @@
    - Contient une clé API OpenWeatherMap exposée en clair dans le frontend
    - Recommandation : déplacer cette logique vers le backend pour sécuriser la clé API
 
-2. frontend/js/location-service-new.js
-   - Le nom suggère qu'il s'agit d'une nouvelle version
-   - Vérifier s'il existe d'anciennes versions non supprimées dans le code
-
 ## Optimisations recommandées
 
-1. Consolidation des fichiers CSS
-   - Plusieurs petits fichiers CSS pourraient être regroupés pour réduire les requêtes HTTP
-   - Par exemple : theme-switcher.css et weather.css pourraient être fusionnés
+1. Consolidation des fichiers CSS et JS
+   - [FAIT] Les fichiers CSS (theme-switcher.css, weather.css, modal.css) ont été fusionnés en ui-components.css
+   - [FAIT] Les fichiers JS ont été fusionnés en deux groupes logiques : ui-components.js et location-services.js
 
 2. Modernisation de la gestion des dépendances
    - Le frontend utilise des balises script directes sans système de modules
@@ -51,6 +77,8 @@
 
 ## Prochaines étapes recommandées
 
-1. Commiter les suppressions de fichiers inutilisés
-2. Vérifier que les fonctionnalités du site fonctionnent correctement après ces suppressions
-3. Envisager une refactorisation progressive du frontend pour améliorer la maintenabilité
+1. [FAIT] Commiter les suppressions et fusions de fichiers
+2. [FAIT] Vérifier que les fonctionnalités du site fonctionnent correctement après ces modifications
+3. Minifier les fichiers CSS et JS fusionnés pour réduire davantage leur taille
+4. Sécuriser la clé API OpenWeatherMap en déplaçant cette logique vers le backend
+5. Envisager une refactorisation progressive du frontend pour améliorer la maintenabilité
