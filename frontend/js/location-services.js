@@ -195,9 +195,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateInterface() {
         if (useGeolocation) {
             // Mode géolocalisation activé
-            cityInputContainer.style.display = 'none';
-            cityInput.required = false;
-            cityInput.value = '';
+            if (cityInputContainer) {
+                cityInputContainer.style.display = 'none';
+            }
+            if (cityInput) {
+                cityInput.required = false;
+                cityInput.value = '';
+            }
             
             // Réduire la hauteur du conteneur quand la géolocalisation est activée
             if (cardContainer) {
@@ -205,8 +209,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             // Mode ville activé
-            cityInputContainer.style.display = 'block';
-            cityInput.required = true;
+            if (cityInputContainer) {
+                cityInputContainer.style.display = 'block';
+            }
+            if (cityInput) {
+                cityInput.required = true;
+            }
             
             // Rétablir la hauteur normale du conteneur
             if (cardContainer) {
