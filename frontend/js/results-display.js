@@ -83,7 +83,26 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
     }
     
     // Récupérer la date de recherche (nécessaire pour la météo)
-    const searchDate = urlParams.get('date') || new Date().toISOString().split('T')[0];
+    let defaultDate;
+    if (!urlParams.get('date')) {
+        // Si pas de date spécifiée dans l'URL, appliquer la logique de date par défaut
+        const now = new Date();
+        const currentHour = now.getHours();
+
+        // Si l'heure actuelle est après 22h, utiliser la date de demain par défaut
+        if (currentHour >= 22) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            defaultDate = tomorrow.toISOString().split('T')[0];
+            console.log('Résultats: Après 22h - Utilisation de la date de demain:', defaultDate);
+        } else {
+            defaultDate = now.toISOString().split('T')[0];
+            console.log('Résultats: Avant 22h - Utilisation de la date d\'aujourd\'hui:', defaultDate);
+        }
+    } else {
+        defaultDate = urlParams.get('date');
+    }
+    const searchDate = defaultDate;
     
     // Regrouper les créneaux par club
     const groupedByClub = {};

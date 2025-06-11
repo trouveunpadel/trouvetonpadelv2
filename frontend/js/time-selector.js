@@ -61,9 +61,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const timeInput = document.getElementById('time');
     
     if (dateInput) {
-        // Définir la date par défaut à aujourd'hui
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.value = today;
+        // Déterminer si nous devons afficher aujourd'hui ou demain
+        const now = new Date();
+        const currentHour = now.getHours();
+        
+        // Si l'heure actuelle est après 22h, afficher la date de demain par défaut
+        let defaultDate;
+        if (currentHour >= 22) {
+            // Calculer la date de demain
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            defaultDate = tomorrow.toISOString().split('T')[0];
+            console.log('Après 22h - Affichage de la date de demain par défaut:', defaultDate);
+        } else {
+            // Avant 22h - Afficher la date d'aujourd'hui
+            defaultDate = now.toISOString().split('T')[0];
+            console.log('Avant 22h - Affichage de la date d\'aujourd\'hui par défaut:', defaultDate);
+        }
+        
+        // Définir la date par défaut et la date minimale
+        const today = now.toISOString().split('T')[0];
+        dateInput.value = defaultDate;
         dateInput.min = today; // Empêcher la sélection de dates passées
         
         // Définir l'heure par défaut à 17h00 pour l'initialisation
