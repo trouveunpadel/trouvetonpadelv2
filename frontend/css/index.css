@@ -162,6 +162,11 @@
         font-size: 16px !important;
         margin-right: 8px !important;
     }
+    
+    /* Corriger la couleur de l'icône tournoi en mode light quand actif */
+    html:not([data-bs-theme="dark"]) #tournaments-tab.active i {
+        color: white !important;
+    }
 }
 
 /* Ajustement pour très petits écrans */
