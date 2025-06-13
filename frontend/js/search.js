@@ -41,6 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Récupérer la ville si la géolocalisation n'est pas utilisée
             const city = !useGeolocation ? document.getElementById('city').value : '';
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
             
             // Utiliser la section dédiée aux résultats
             const resultsSection = document.getElementById('results-section');
@@ -84,47 +86,19 @@ document.addEventListener('DOMContentLoaded', function() {
                         throw new Error(`Erreur de géolocalisation: ${geoError.message || 'Détails non disponibles'}`);
                     }
                 } else {
-                    // Vérifier que la ville est bien renseignée
-                    if (!city || city.trim() === '') {
+                    // Utiliser les coordonnées des champs cachés
+                    if (!latitude || !longitude) {
                         // Masquer la section des résultats
                         resultsSection.style.display = 'none';
-                        // Afficher à nouveau la section des fonctionnalités
+                        
+                        // Afficher à nouveau les autres sections
                         document.querySelector('.features').style.display = 'block';
                         
-                        // Afficher notre popup personnalisée sans scroll
-                        customModal.show(
-                            'Localisation manquante', 
-                            'Veuillez saisir une ville ou activer la géolocalisation pour effectuer votre recherche.'
-                        );
-                        
-                        return; // Arrêter l'exécution de la fonction
+                        // Afficher une alerte
+                        alert('Veuillez sélectionner une ville dans la liste de suggestions.');
+                        return; // Arrêter l'exécution
                     }
-                    
-                    // Utiliser la ville saisie
-                    console.log('Tentative de géocodage pour la ville:', city);
-                    try {
-                        coordinates = await LocationService.getCoordinatesFromCity(city);
-                        console.log('Coordonnées de la ville obtenues:', coordinates);
-                        
-                        if (!coordinates) {
-                            throw new Error('Impossible de trouver les coordonnées pour cette ville');
-                        }
-                    } catch (geoError) {
-                        console.error('Erreur lors du géocodage:', geoError);
-                        
-                        // Masquer la section des résultats
-                        resultsSection.style.display = 'none';
-                        // Afficher à nouveau la section des fonctionnalités
-                        document.querySelector('.features').style.display = 'block';
-                        
-                        // Afficher notre popup personnalisée sans scroll
-                        customModal.show(
-                            'Ville introuvable', 
-                            `Impossible de localiser "${city}". Veuillez vérifier l'orthographe ou essayer une autre ville.`
-                        );
-                        
-                        return; // Arrêter l'exécution de la fonction
-                    }
+                    coordinates = { latitude: parseFloat(latitude), longitude: parseFloat(longitude) };
                 }
                 
                 console.log('Préparation de la recherche de créneaux...');

@@ -367,9 +367,6 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
     
     container.innerHTML = html;
     
-    // Ajouter la classe mobile au container
-    container.classList.add('mobile-results-container');
-    
     // Ajouter des événements de clic sur les boutons de réservation et les créneaux
     setTimeout(() => {
         // Gérer les clics sur les boutons de réservation
@@ -785,8 +782,10 @@ function displayMobileResults(filteredClubs, container, searchDate) {
     }, 100);
 }
 
+// Sauvegarder la fonction desktop originale AVANT qu'elle ne soit modifiée
+const originalDesktopProcessAndDisplayResults = window.processAndDisplayResults;
+
 // Modifier la fonction processAndDisplayResults pour détecter le mobile
-const originalProcessAndDisplayResults = window.processAndDisplayResults;
 window.processAndDisplayResults = function(slots, container, searchCoordinates) {
     console.log('processAndDisplayResults appelé avec', slots.length, 'créneaux, mobile:', isMobileDevice());
     
@@ -889,6 +888,6 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
     } else {
         console.log('Affichage desktop détecté');
         // Utiliser l'affichage desktop original
-        originalProcessAndDisplayResults(slots, container, searchCoordinates);
+        originalDesktopProcessAndDisplayResults(slots, container, searchCoordinates);
     }
 };
