@@ -618,7 +618,7 @@ main {
     /* Container mobile */
     .mobile-results-container {
         padding: 0;
-        background-color: #000000;
+        background-color: var(--bs-body-bg, #000000);
     }
     
     .mobile-results-count {
@@ -866,5 +866,144 @@ main {
     .mobile-slots-list,
     .mobile-slot-card {
         display: none !important;
+    }
+}
+
+/* ===== STYLES POUR LE MODE LIGHT MOBILE ===== */
+@media (max-width: 768px) {
+    html[data-bs-theme="light"] body {
+        background-color: #ffffff !important;
+    }
+    
+    html[data-bs-theme="light"] main {
+        background-color: #ffffff !important;
+    }
+    
+    html[data-bs-theme="light"] .results-section {
+        background-color: #ffffff !important;
+    }
+    
+    html[data-bs-theme="light"] .results-section .container {
+        background-color: #ffffff !important;
+    }
+    
+    html[data-bs-theme="light"] .mobile-results-container {
+        background-color: #ffffff !important;
+        color: #000000;
+    }
+    
+    html[data-bs-theme="light"] .mobile-results-header {
+        background-color: #ffffff !important;
+        color: #000000;
+    }
+    
+    html[data-bs-theme="light"] .mobile-slots-list {
+        background-color: #ffffff !important;
+    }
+    
+    html[data-bs-theme="light"] .mobile-slot-card {
+        background-color: #ffffff !important;
+        border: none;
+        border-bottom: 1px solid #e9ecef;
+        color: #000000;
+    }
+    
+    html[data-bs-theme="light"] .mobile-slot-club {
+        color: #000000;
+        font-weight: 600;
+    }
+    
+    html[data-bs-theme="light"] .mobile-slot-court {
+        color: #495057;
+    }
+    
+    html[data-bs-theme="light"] .mobile-slot-time {
+        color: #000000;
+    }
+    
+    html[data-bs-theme="light"] .mobile-slot-type {
+        color: #6c757d;
+    }
+    
+    html[data-bs-theme="light"] .mobile-distance, 
+    html[data-bs-theme="light"] .mobile-wind-info {
+        color: #000000; /* Noir en mode light */
+    }
+    
+    html[data-bs-theme="light"] .mobile-distance .icon {
+        color: #000000; /* Icône noire */
+    }
+    
+    html[data-bs-theme="light"] .mobile-weather-temp {
+        color: #000000;
+    }
+    
+    html[data-bs-theme="light"] .mobile-weather-info {
+        color: #000000;
+    }
+    
+    /* Filtres mobiles en mode Light */
+    html[data-bs-theme="light"] .mobile-filters:first-child {
+        background-color: #e9ecef;
+    }
+    
+    html[data-bs-theme="light"] .mobile-filters:first-child .mobile-filter-btn {
+        color: #495057;
+    }
+    
+    html[data-bs-theme="light"] .mobile-filters:first-child .mobile-filter-btn.active {
+        background-color: #C6FF00;
+        color: #000000;
+    }
+    
+    html[data-bs-theme="light"] .mobile-filters:nth-child(2) .mobile-filter-btn {
+        background-color: #f8f9fa;
+        color: #495057;
+        border: 1px solid #dee2e6;
+    }
+    
+    html[data-bs-theme="light"] .mobile-filters:nth-child(2) .mobile-filter-btn.active {
+        background-color: #C6FF00;
+        color: #000000;
+        border-color: #C6FF00;
+    }
+    
+    /* Header mobile en mode Light */
+    html[data-bs-theme="light"] .mobile-header {
+        background-color: #ffffff;
+        color: #000000;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    html[data-bs-theme="light"] .mobile-header h1 {
+        color: #000000;
+    }
+    
+    html[data-bs-theme="light"] .mobile-header-bottom h2 {
+        color: #000000 !important;
+    }
+    
+    html[data-bs-theme="light"] #search-date-display-mobile {
+        color: #000000 !important;
+    }
+    
+    /* Bouton Réserver en mode Light - garder le jaune */
+    html[data-bs-theme="light"] .mobile-reserve-btn {
+        background: #C6FF00;
+        color: #000000;
+    }
+    
+    html[data-bs-theme="light"] .mobile-reserve-btn:active {
+        background: #A8E600;
+        color: #000000;
+    }
+    
+    /* Ajout des styles pour harmoniser le chargement en mode light mobile */
+    html[data-bs-theme="light"] .loading-container {
+        background-color: #ffffff !important;
+    }
+    
+    html[data-bs-theme="light"] .results-container {
+        background-color: #ffffff !important;
     }
 }

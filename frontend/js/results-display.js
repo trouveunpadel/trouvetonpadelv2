@@ -104,9 +104,6 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
     // Regrouper les créneaux par club
     const groupedByClub = {};
     
-    // Afficher tous les slots pour le débogage
-    console.log('Tous les slots reçus:', slots.map(s => ({ club: s.clubName, court: s.court, time: s.time })));
-    
     slots.forEach(slot => {
         if (!groupedByClub[slot.clubName]) {
             // Utiliser la configuration centralisée des clubs
@@ -370,6 +367,9 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
     
     container.innerHTML = html;
     
+    // Ajouter la classe mobile au container
+    container.classList.add('mobile-results-container');
+    
     // Ajouter des événements de clic sur les boutons de réservation et les créneaux
     setTimeout(() => {
         // Gérer les clics sur les boutons de réservation
@@ -542,9 +542,9 @@ function displayMobileResults(filteredClubs, container, searchDate) {
         club.slots.forEach(slot => {
             allSlots.push({
                 ...slot,
-                clubName: club.name,
-                clubAddress: club.address,
                 distance: club.distance,
+                clubName: slot.clubName || club.name,
+                clubAddress: club.address,
                 coordinates: club.coordinates
             });
         });
@@ -573,8 +573,7 @@ function displayMobileResults(filteredClubs, container, searchDate) {
     // Ajouter les filtres par club (sans bouton "Tous")
     const uniqueClubs = [...new Set(allSlots.map(slot => slot.clubName))];
     uniqueClubs.forEach(clubName => {
-        const shortName = clubName.replace(/\s+/g, '').substring(0, 15);
-        html += `<button class="mobile-filter-btn" data-club-filter="${clubName}">${shortName}</button>`;
+        html += `<button class="mobile-filter-btn" data-club-filter="${clubName}">${clubName}</button>`;
     });
     
     html += `
@@ -592,9 +591,6 @@ function displayMobileResults(filteredClubs, container, searchDate) {
                           courtTypeLower.includes('exterior') || 
                           courtTypeLower.includes('outdoor');
         const typeDisplay = isExterior ? 'Extérieur' : 'Intérieur';
-        
-        // Log pour débogage
-        console.log('Mobile - Type de court:', courtType, '- Est extérieur:', isExterior);
         
         // Extraire la ville de l'adresse (après le code postal)
         let city = '';
@@ -617,7 +613,7 @@ function displayMobileResults(filteredClubs, container, searchDate) {
                  data-club="${slot.clubName}"
                  data-type="${isExterior ? 'exterieur' : 'interieur'}"
                  data-has-reservation-info="${slot.hasReservationInfo || false}"
-                 data-redirect-url="${slot.redirectUrl || ''}">
+                 data-redirect-url="${slot.reservationLink || ''}">
                 
                 <div class="mobile-slot-left">
                     <div class="mobile-slot-club">${slot.clubName}</div>
@@ -640,17 +636,7 @@ function displayMobileResults(filteredClubs, container, searchDate) {
         </div>
     `;
     
-    console.log('Mobile - Container avant injection:', container);
-    console.log('Mobile - Container ID:', container.id);
-    console.log('Mobile - Container classes:', container.className);
-    
-    // Ajouter la classe mobile au container
-    container.classList.add('mobile-results-container');
-    
     container.innerHTML = html;
-    
-    console.log('Mobile - HTML injecté, longueur:', html.length);
-    console.log('Mobile - Container après injection:', container.innerHTML.length);
     
     // Ajouter les événements pour les filtres et les créneaux
     setTimeout(() => {
@@ -715,17 +701,24 @@ function displayMobileResults(filteredClubs, container, searchDate) {
             });
         });
         
-        // Gestion des clics sur les créneaux
-        const mobileSlotCards = container.querySelectorAll('.mobile-slot-card');
-        mobileSlotCards.forEach(slotCard => {
-            slotCard.addEventListener('click', function() {
-                const hasReservationInfo = this.getAttribute('data-has-reservation-info') === 'true';
+        // Gestion des clics sur les boutons Réserver
+        const mobileReserveButtons = container.querySelectorAll('.mobile-reserve-btn');
+        
+        mobileReserveButtons.forEach((button, index) => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
                 
-                if (hasReservationInfo) {
-                    const redirectUrl = this.getAttribute('data-redirect-url');
+                const slotCard = this.closest('.mobile-slot-card');
+                
+                const hasReservationInfo = slotCard.getAttribute('data-has-reservation-info') === 'true';
+                const redirectUrl = slotCard.getAttribute('data-redirect-url');
+                
+                // Ouvrir le lien s'il existe, peu importe hasReservationInfo
+                if (redirectUrl && redirectUrl.trim() !== '') {
                     window.open(redirectUrl, '_blank');
                 } else {
-                    alert('Informations de réservation non disponibles pour ce créneau.');
+                    alert('Lien de réservation non disponible pour ce créneau.');
                 }
             });
         });
