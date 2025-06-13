@@ -9,6 +9,129 @@
         padding-top: 40px !important; /* Réduit à 40px comme demandé */
     }
     
+    /* Optimisation de la carte de recherche sur mobile */
+    .card-body {
+        padding: 1rem !important; /* Réduire le padding de la carte */
+    }
+    
+    /* Renforcer les bordures des cartes uniquement en mode light sur mobile */
+    html:not([data-bs-theme="dark"]) .card {
+        border: 1.5px solid #dee2e6 !important; /* Bordure plus épaisse en mode light */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important; /* Légère ombre en mode light */
+    }
+    
+    /* Réduire l'espacement entre les éléments du formulaire */
+    .row.g-3 {
+        --bs-gutter-y: 0.5rem !important; /* Encore plus réduit */
+    }
+    
+    /* Aligner tous les éléments sur la largeur du toggle */
+    .row.g-3,
+    #city-input-container,
+    .col-12:not(.mb-3) {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
+    /* Optimiser les champs date et heure avec proportions différentes */
+    .date-column {
+        flex: 0 0 calc(65% - 0.25rem) !important; /* Date plus large */
+        max-width: calc(65% - 0.25rem) !important;
+        padding-left: 0 !important;
+    }
+    
+    .time-column {
+        flex: 0 0 calc(35% - 0.25rem) !important; /* Heure plus étroite */
+        max-width: calc(35% - 0.25rem) !important;
+        padding-right: 0 !important;
+    }
+    
+    /* Masquer le mot "minimum" du label heure sur mobile */
+    .time-column .form-label {
+        font-size: 0 !important; /* Masquer le texte original */
+    }
+    
+    .time-column .form-label::after {
+        content: "Heure";
+        font-size: 0.9rem !important;
+        font-weight: normal !important;
+    }
+    
+    /* Réduire la taille des labels */
+    .form-label {
+        font-size: 0.9rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    /* Optimiser la hauteur des inputs */
+    .form-control, .form-range {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    /* Optimiser le toggle géolocalisation - texte plus petit sur une ligne */
+    .col-12.mb-3 {
+        margin-bottom: 0.5rem !important; /* Réduire encore l'espacement */
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
+    /* Corriger le conteneur du toggle pour qu'il ne dépasse pas */
+    .col-12.mb-3 .d-flex {
+        padding-right: 0 !important;
+        margin-right: 0 !important;
+        max-width: 100% !important;
+    }
+    
+    .col-12.mb-3 .form-check-label {
+        font-size: 0.85rem !important; /* Texte plus petit */
+        font-weight: 500 !important; /* Moins gras */
+        flex-shrink: 1 !important; /* Permettre au texte de se réduire */
+    }
+    
+    /* Corriger le toggle qui dépasse - réduire sa taille */
+    #use-location-toggle {
+        transform: scale(1.3) !important; /* Plus petit que 1.6 */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    
+    .form-check.form-switch {
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+        flex-shrink: 0 !important; /* Garder la taille du toggle */
+    }
+    
+    /* Réduire l'espacement après le toggle géolocalisation */
+    #city-input-container {
+        margin-top: 0.25rem !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
+    /* Optimiser l'affichage du slider de rayon */
+    .form-range {
+        margin: 0.25rem 0 !important; /* Marges encore plus réduites */
+    }
+    
+    /* Réduire l'espacement des indicateurs du slider */
+    .d-flex.justify-content-between.small {
+        display: none !important; /* Masquer complètement sur mobile */
+    }
+    
+    /* Optimiser le bouton de recherche */
+    .btn {
+        padding: 0.3rem 1rem !important;
+        font-size: 0.95rem !important;
+    }
+    
+    /* Réduire drastiquement l'espacement avant le bouton */
+    .col-12.mt-4 {
+        margin-top: 0.75rem !important; /* Beaucoup plus proche */
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
     /* Raccourcir le texte des boutons de recherche sur mobile */
     #slots-tab {
         font-size: 0 !important; /* Masquer le texte original */
@@ -45,5 +168,24 @@
 @media (max-width: 400px) {
     body {
         padding-top: 40px !important;
+    }
+    
+    /* Sur très petits écrans, réduire encore plus l'espacement */
+    .card-body {
+        padding: 0.75rem !important;
+    }
+    
+    .form-label {
+        font-size: 0.85rem !important;
+    }
+    
+    .form-control {
+        font-size: 0.85rem !important;
+        padding: 0.4rem 0.6rem !important;
+    }
+    
+    /* Texte géolocalisation encore plus petit sur très petits écrans */
+    .col-12.mb-3 .form-check-label {
+        font-size: 0.8rem !important;
     }
 }

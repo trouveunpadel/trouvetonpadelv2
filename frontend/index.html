@@ -96,13 +96,13 @@
                                     <div class="tab-pane fade show active" id="slots-search" role="tabpanel">
                                         <form id="search-form" class="needs-validation" novalidate onsubmit="return validateAndSubmitForm(event);">
                                             <div class="row g-3">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 date-column">
                                                     <label for="date" class="form-label">Date</label>
                                                     <input type="date" id="date" class="form-control" required>
                                                     <div class="invalid-feedback">Veuillez choisir une date</div>
                                                 </div>
 
-                                                <div class="col-md-6">
+                                                <div class="col-md-6 time-column">
                                                     <label for="time" class="form-label">Heure minimum</label>
                                                     <input type="time" id="time" class="form-control" required>
                                                     <div class="invalid-feedback">Veuillez choisir une heure</div>
@@ -125,10 +125,10 @@
 
                                                 <div class="col-12">
                                                     <label for="radius" class="form-label">Rayon: <span id="radius-value" class="fw-bold">20</span> km</label>
-                                                    <input type="range" id="radius" class="form-range" min="5" max="50" step="5" value="20">
+                                                    <input type="range" id="radius" class="form-range" min="5" max="30" step="5" value="20">
                                                     <div class="d-flex justify-content-between small text-muted">
                                                         <span>5 km</span>
-                                                        <span>50 km</span>
+                                                        <span>30 km</span>
                                                     </div>
                                                 </div>
 
@@ -165,10 +165,10 @@
 
                                                 <div class="col-12">
                                                     <label for="tournament-radius" class="form-label">Rayon: <span id="tournament-radius-value" class="fw-bold">20</span> km</label>
-                                                    <input type="range" id="tournament-radius" class="form-range" min="5" max="50" step="5" value="20">
+                                                    <input type="range" id="tournament-radius" class="form-range" min="5" max="30" step="5" value="20">
                                                     <div class="d-flex justify-content-between small text-muted">
                                                         <span>5 km</span>
-                                                        <span>50 km</span>
+                                                        <span>30 km</span>
                                                     </div>
                                                 </div>
 
