@@ -110,7 +110,7 @@
 
 /* Styles spécifiques à la page des résultats */
 [data-bs-theme="dark"] .results-section {
-    background-color: #121212;
+    background-color: #000;
 }
 
 [data-bs-theme="dark"] .club-left-column,

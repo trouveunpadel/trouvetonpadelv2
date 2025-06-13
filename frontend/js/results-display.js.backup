@@ -72,6 +72,7 @@ window.displayResults = function(slots, container) {
  * @param {Object|null} searchCoordinates - Coordonnées de recherche (latitude, longitude) ou null
  */
 window.processAndDisplayResults = function(slots, container, searchCoordinates) {
+    console.log('Début du traitement des résultats avec', slots.length, 'créneaux');
     // Récupérer le rayon de recherche depuis les paramètres d'URL ou utiliser une valeur par défaut
     let radius = 20; // Valeur par défaut
     
@@ -93,8 +94,10 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             defaultDate = tomorrow.toISOString().split('T')[0];
+            console.log('Résultats: Après 22h - Utilisation de la date de demain:', defaultDate);
         } else {
             defaultDate = now.toISOString().split('T')[0];
+            console.log('Résultats: Avant 22h - Utilisation de la date d\'aujourd\'hui:', defaultDate);
         }
     } else {
         defaultDate = urlParams.get('date');
@@ -106,6 +109,13 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
     
     // Afficher tous les slots pour le débogage
     console.log('Tous les slots reçus:', slots.map(s => ({ club: s.clubName, court: s.court, time: s.time })));
+    
+    // Vérifier spécifiquement si Enjoy Padel est présent dans les slots
+    const enjoyPadelSlots = slots.filter(s => s.clubName === 'Enjoy Padel');
+    console.log('Slots Enjoy Padel trouvés:', enjoyPadelSlots.length);
+    if (enjoyPadelSlots.length > 0) {
+        console.log('Premier slot Enjoy Padel:', enjoyPadelSlots[0]);
+    }
     
     slots.forEach(slot => {
         if (!groupedByClub[slot.clubName]) {
@@ -149,10 +159,12 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
                         groupedByClub[slot.clubName].distanceValue = calculatedDistance;
                         // Arrondir à une décimale et ajouter l'unité pour l'affichage
                         groupedByClub[slot.clubName].distance = calculatedDistance.toFixed(1) + ' km';
+                        console.log(`Distance calculée pour ${slot.clubName}: ${groupedByClub[slot.clubName].distance}`);
                         
                         // Marquer le club comme dans le rayon ou hors rayon
                         // On considère qu'un club est dans le rayon si sa distance est inférieure ou égale au rayon spécifié
                         groupedByClub[slot.clubName].outOfRange = (calculatedDistance > radius);
+                        console.log(`Club ${slot.clubName} - Distance: ${calculatedDistance} km - Rayon: ${radius} km - Dans le rayon: ${!groupedByClub[slot.clubName].outOfRange}`);
                     } else {
                         console.warn(`Coordonnées invalides pour le club ${slot.clubName}:`, clubCoordinates);
                         groupedByClub[slot.clubName].distance = 'N/A';
@@ -297,10 +309,12 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
             
             // Vérifier si le slot a un type défini
             if (slotsByCourt[court] && slotsByCourt[court].length > 0) {
+                console.log('Données du créneau pour le terrain', court, ':', slotsByCourt[court][0]);
                 
                 try {
                     // Utiliser le type du premier créneau pour ce terrain (vérifier courtType d'abord, puis type)
                     courtType = slotsByCourt[court][0].courtType || slotsByCourt[court][0].type || 'Non spécifié';
+                    console.log('Type de terrain détecté:', courtType);
                     
                     // Mettre la première lettre en majuscule
                     courtType = courtType.charAt(0).toUpperCase() + courtType.slice(1);
@@ -437,7 +451,7 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
                                 <div class="weather-temp">${weatherData.temperature}°C</div>
                                 <div class="weather-wind">
                                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
-                                        <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2.5 2.5 0 1 1 19.5 12H2" />
+                                        <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2" />
                                     </svg>
                                     ${weatherData.windSpeed} km/h
                                 </div>
@@ -516,386 +530,3 @@ window.processAndDisplayResults = function(slots, container, searchCoordinates) 
         });
     }, 100);
 }
-
-/**
- * AFFICHAGE MOBILE - Ajout de la logique mobile sans modification du desktop
- */
-
-/**
- * Détecte si l'utilisateur est sur mobile
- * @returns {boolean} - true si mobile, false sinon
- */
-function isMobileDevice() {
-    return window.innerWidth <= 768;
-}
-
-/**
- * Affiche les résultats en mode mobile (liste verticale)
- * @param {Array} filteredClubs - Liste des clubs filtrés
- * @param {HTMLElement} container - Conteneur pour afficher les résultats
- * @param {string} searchDate - Date de recherche
- */
-function displayMobileResults(filteredClubs, container, searchDate) {
-    // Trier tous les créneaux par heure
-    const allSlots = [];
-    filteredClubs.forEach(club => {
-        club.slots.forEach(slot => {
-            allSlots.push({
-                ...slot,
-                clubName: club.name,
-                clubAddress: club.address,
-                distance: club.distance,
-                coordinates: club.coordinates
-            });
-        });
-    });
-    
-    // Trier par heure
-    allSlots.sort((a, b) => {
-        const timeA = a.time.split(':').map(Number);
-        const timeB = b.time.split(':').map(Number);
-        return (timeA[0] * 60 + timeA[1]) - (timeB[0] * 60 + timeB[1]);
-    });
-
-    // Générer le HTML avec filtres
-    let html = `
-        <div class="mobile-results-header">
-            <!-- Filtres mobiles tout en haut -->
-            <div class="mobile-filters">
-                <button class="mobile-filter-btn active" data-filter="all">Tous</button>
-                <button class="mobile-filter-btn" data-filter="interieur">Intérieur</button>
-                <button class="mobile-filter-btn" data-filter="exterieur">Extérieur</button>
-            </div>
-            
-            <!-- Filtres par club -->
-            <div class="mobile-filters" id="club-filters">`;
-    
-    // Ajouter les filtres par club (sans bouton "Tous")
-    const uniqueClubs = [...new Set(allSlots.map(slot => slot.clubName))];
-    uniqueClubs.forEach(clubName => {
-        const shortName = clubName.replace(/\s+/g, '').substring(0, 15);
-        html += `<button class="mobile-filter-btn" data-club-filter="${clubName}">${shortName}</button>`;
-    });
-    
-    html += `
-            </div>
-            
-            <div class="mobile-slots-list">`;
-    
-    // Générer les cartes de créneaux
-    allSlots.forEach(slot => {
-        const courtType = slot.courtType || slot.type || 'Non spécifié';
-        // Détection améliorée pour les courts extérieurs (avec et sans accent)
-        const courtTypeLower = courtType.toLowerCase();
-        const isExterior = courtTypeLower.includes('extérieur') || 
-                          courtTypeLower.includes('exterieur') || 
-                          courtTypeLower.includes('exterior') || 
-                          courtTypeLower.includes('outdoor');
-        const typeDisplay = isExterior ? 'Extérieur' : 'Intérieur';
-        
-        // Log pour débogage
-        console.log('Mobile - Type de court:', courtType, '- Est extérieur:', isExterior);
-        
-        // Extraire la ville de l'adresse (après le code postal)
-        let city = '';
-        if (slot.clubAddress) {
-            // Chercher le pattern "code postal + ville" dans l'adresse
-            const match = slot.clubAddress.match(/\d{5}\s+([^,]+)/);
-            if (match) {
-                city = match[1].trim();
-            } else {
-                // Si pas de code postal trouvé, prendre la dernière partie après la dernière virgule
-                const parts = slot.clubAddress.split(',');
-                city = parts[parts.length - 1].trim();
-                // Supprimer le code postal s'il est au début
-                city = city.replace(/^\d{5}\s*/, '').trim();
-            }
-        }
-        
-        html += `
-            <div class="mobile-slot-card" 
-                 data-club="${slot.clubName}"
-                 data-type="${isExterior ? 'exterieur' : 'interieur'}"
-                 data-has-reservation-info="${slot.hasReservationInfo || false}"
-                 data-redirect-url="${slot.redirectUrl || ''}">
-                
-                <div class="mobile-slot-left">
-                    <div class="mobile-slot-club">${slot.clubName}</div>
-                    <div class="mobile-slot-court">${slot.court}</div>
-                    <div class="mobile-slot-location">
-                        ${slot.distance ? `<span class="mobile-distance"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21C16 17 20 13.4183 20 10C20 6.13401 16.4183 3 12 3C7.58172 3 4 6.13401 4 10C4 13.4183 8 17 12 21Z" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/></svg> ${slot.distance}</span>` : ''}
-                        ${city || ''}
-                    </div>
-                    <button class="mobile-reserve-btn">Réserver</button>
-                </div>
-                
-                <div class="mobile-slot-right">
-                    <div class="mobile-slot-time">${slot.time}</div>
-                    <div class="mobile-slot-type">${typeDisplay}</div>
-                </div>
-            </div>`;
-    });
-    
-    html += `
-        </div>
-    `;
-    
-    console.log('Mobile - Container avant injection:', container);
-    console.log('Mobile - Container ID:', container.id);
-    console.log('Mobile - Container classes:', container.className);
-    
-    // Ajouter la classe mobile au container
-    container.classList.add('mobile-results-container');
-    
-    container.innerHTML = html;
-    
-    console.log('Mobile - HTML injecté, longueur:', html.length);
-    console.log('Mobile - Container après injection:', container.innerHTML.length);
-    
-    // Ajouter les événements pour les filtres et les créneaux
-    setTimeout(() => {
-        // Gestion des filtres par type
-        const typeFilters = container.querySelectorAll('[data-filter]');
-        typeFilters.forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Retirer la classe active des autres boutons du même groupe
-                this.parentElement.querySelectorAll('.mobile-filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                const filterType = this.getAttribute('data-filter');
-                const cards = container.querySelectorAll('.mobile-slot-card');
-                
-                // Mettre à jour les attributs data-type pour s'assurer qu'ils sont corrects
-                cards.forEach(card => {
-                    // Récupérer le type de court affiché dans la carte
-                    const courtTypeElement = card.querySelector('.mobile-slot-type');
-                    if (courtTypeElement) {
-                        const courtTypeText = courtTypeElement.textContent.toLowerCase();
-                        // Détecter si c'est extérieur ou intérieur
-                        if (courtTypeText.includes('extérieur')) {
-                            card.setAttribute('data-type', 'exterieur');
-                        } else {
-                            card.setAttribute('data-type', 'interieur');
-                        }
-                    }
-                    
-                    // Appliquer le filtre
-                    if (filterType === 'all' || filterType === 'interieur' || card.getAttribute('data-type') === filterType) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-        
-        // Gestion des filtres par club
-        const clubFilters = container.querySelectorAll('[data-club-filter]');
-        clubFilters.forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Ajouter ou retirer la classe active
-                this.classList.toggle('active');
-                
-                // Récupérer tous les clubs sélectionnés
-                const selectedClubs = Array.from(container.querySelectorAll('[data-club-filter].active'))
-                    .map(btn => btn.getAttribute('data-club-filter'));
-                
-                const cards = container.querySelectorAll('.mobile-slot-card');
-                
-                // Si aucun club sélectionné, afficher tous les créneaux
-                // Sinon, afficher seulement les créneaux des clubs sélectionnés
-                cards.forEach(card => {
-                    const cardClub = card.getAttribute('data-club');
-                    if (selectedClubs.length === 0 || selectedClubs.includes(cardClub)) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-        
-        // Gestion des clics sur les créneaux
-        const mobileSlotCards = container.querySelectorAll('.mobile-slot-card');
-        mobileSlotCards.forEach(slotCard => {
-            slotCard.addEventListener('click', function() {
-                const hasReservationInfo = this.getAttribute('data-has-reservation-info') === 'true';
-                
-                if (hasReservationInfo) {
-                    const redirectUrl = this.getAttribute('data-redirect-url');
-                    window.open(redirectUrl, '_blank');
-                } else {
-                    alert('Informations de réservation non disponibles pour ce créneau.');
-                }
-            });
-        });
-        
-        // Charger les données météo pour chaque club (version mobile simplifiée)
-        const processedClubs = new Set();
-        filteredClubs.forEach(async club => {
-            if (processedClubs.has(club.name)) return;
-            processedClubs.add(club.name);
-            
-            if (club.coordinates && window.WeatherService) {
-                try {
-                    const weatherData = await window.WeatherService.getWeatherForecast(
-                        searchDate,
-                        club.coordinates.latitude,
-                        club.coordinates.longitude
-                    );
-                    
-                    // Ajouter l'info météo aux cartes de ce club
-                    const clubCards = container.querySelectorAll(`[data-club="${club.name}"]`);
-                    clubCards.forEach(card => {
-                        // Supprimer l'information sur le vent de la partie location
-                        const locationDiv = card.querySelector('.mobile-slot-location');
-                        const existingWindInfo = locationDiv && locationDiv.querySelector('.mobile-wind-info');
-                        if (existingWindInfo) {
-                            existingWindInfo.remove();
-                        }
-                        
-                        // Ajouter les icônes météo dans la partie droite
-                        const rightDiv = card.querySelector('.mobile-slot-right');
-                        if (rightDiv && !rightDiv.querySelector('.mobile-weather-info')) {
-                            // Ajouter l'information sur le vent en premier
-                            rightDiv.innerHTML += `
-                                <div class="mobile-weather-info mobile-wind-info">
-                                    <span>🌬️ ${weatherData.windSpeed} km/h</span>
-                                </div>
-                            `;
-                            
-                            // Ajouter l'icône météo
-                            rightDiv.innerHTML += `
-                                <div class="mobile-weather-info">
-                                    <img src="${window.WeatherService.getWeatherIconUrl(weatherData.weatherIcon)}" alt="météo" class="mobile-weather-icon" />
-                                </div>
-                            `;
-                            
-                            // Ajouter la température
-                            rightDiv.innerHTML += `
-                                <div class="mobile-weather-info">
-                                    <span class="mobile-weather-temp">${weatherData.temperature}°C</span>
-                                </div>
-                            `;
-                        }
-                    });
-                } catch (error) {
-                    console.error('Erreur météo mobile pour', club.name, ':', error);
-                }
-            }
-        });
-        
-        // Ajouter des logs de débogage
-        console.log('Affichage mobile - Nombre de créneaux:', allSlots.length);
-        console.log('Affichage mobile - Premiers créneaux:', allSlots.slice(0, 3));
-        console.log('Affichage mobile - HTML généré, longueur:', html.length);
-    }, 100);
-}
-
-// Modifier la fonction processAndDisplayResults pour détecter le mobile
-const originalProcessAndDisplayResults = window.processAndDisplayResults;
-window.processAndDisplayResults = function(slots, container, searchCoordinates) {
-    console.log('processAndDisplayResults appelé avec', slots.length, 'créneaux, mobile:', isMobileDevice());
-    
-    // Si on est sur mobile, utiliser l'affichage mobile
-    if (isMobileDevice()) {
-        console.log('Affichage mobile détecté - début du traitement');
-        
-        // Récupérer les paramètres nécessaires (copié du code desktop)
-        let radius = 20;
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('radius')) {
-            radius = parseInt(urlParams.get('radius'), 10);
-        }
-        
-        let defaultDate;
-        if (!urlParams.get('date')) {
-            const now = new Date();
-            const currentHour = now.getHours();
-            if (currentHour >= 22) {
-                const tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                defaultDate = tomorrow.toISOString().split('T')[0];
-            } else {
-                defaultDate = now.toISOString().split('T')[0];
-            }
-        } else {
-            defaultDate = urlParams.get('date');
-        }
-        const searchDate = defaultDate;
-        
-        // Regrouper les créneaux par club (même logique que desktop)
-        const groupedByClub = {};
-        
-        slots.forEach(slot => {
-            if (!groupedByClub[slot.clubName]) {
-                const knownClubCoordinates = {
-                    "The Monkey Padel": window.clubsConfig.monkeypadel,
-                    "Le Complexe Padel": window.clubsConfig.complexepadel,
-                    "P4 Padel Indoor": window.clubsConfig.p4padelindoor,
-                    "Enjoy Padel": window.clubsConfig.enjoypadel,
-                    "Padel Gentle": window.clubsConfig.padelgentle,
-                    "Country Club Padel": window.clubsConfig.countryclubpadel
-                };
-                
-                const clubCoordinates = knownClubCoordinates[slot.clubName] || slot.coordinates || null;
-                
-                groupedByClub[slot.clubName] = {
-                    name: slot.clubName,
-                    distance: slot.distance || "--",
-                    address: slot.address || "Adresse du club",
-                    type: "Club de padel",
-                    coordinates: clubCoordinates,
-                    slots: [],
-                    outOfRange: false
-                };
-                
-                // Calculer la distance si possible
-                if (searchCoordinates && clubCoordinates) {
-                    try {
-                        // Vérifier que les coordonnées sont dans le bon format
-                        const formattedCoordinates = {
-                            latitude: parseFloat(clubCoordinates.latitude) || 0,
-                            longitude: parseFloat(clubCoordinates.longitude) || 0
-                        };
-                        
-                        // Ne calculer la distance que si les coordonnées sont valides et LocationService est disponible
-                        if (formattedCoordinates.latitude && formattedCoordinates.longitude && typeof LocationService !== 'undefined') {
-                            const calculatedDistance = LocationService.calculateDistance(searchCoordinates, formattedCoordinates);
-                            groupedByClub[slot.clubName].distanceValue = calculatedDistance;
-                            groupedByClub[slot.clubName].distance = calculatedDistance.toFixed(1) + ' km';
-                            groupedByClub[slot.clubName].outOfRange = (calculatedDistance > radius);
-                        } else {
-                            console.warn(`Coordonnées invalides ou LocationService non disponible pour le club ${slot.clubName}:`, clubCoordinates);
-                            groupedByClub[slot.clubName].distance = 'N/A';
-                        }
-                    } catch (e) {
-                        console.error('Erreur calcul distance mobile:', e);
-                        groupedByClub[slot.clubName].distance = 'N/A';
-                    }
-                }
-            }
-            groupedByClub[slot.clubName].slots.push(slot);
-        });
-        
-        // Filtrer les clubs dans le rayon
-        const filteredClubs = searchCoordinates 
-            ? Object.values(groupedByClub).filter(club => !club.outOfRange) 
-            : Object.values(groupedByClub);
-        
-        if (filteredClubs.length === 0) {
-            container.innerHTML = `
-                <div style="text-align: center; padding: 40px 20px; color: #767676; font-size: 14px;">
-                    Aucun club de padel disponible dans un rayon de ${radius} km.
-                </div>`;  
-            return;
-        }
-        
-        // Utiliser l'affichage mobile
-        displayMobileResults(filteredClubs, container, searchDate);
-    } else {
-        console.log('Affichage desktop détecté');
-        // Utiliser l'affichage desktop original
-        originalProcessAndDisplayResults(slots, container, searchCoordinates);
-    }
-};

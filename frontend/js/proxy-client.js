@@ -125,15 +125,15 @@ class TrouveTonPadelProxy {
             // Déterminer l'URL de base à utiliser
             let baseUrl = this.config.backendUrl;
             
-            // Si nous sommes dans un environnement de prévisualisation (comme Cascade)
-            const isPreviewEnvironment = window.location.href.includes('127.0.0.1');
-            if (isPreviewEnvironment) {
-                console.log('Environnement de prévisualisation détecté, adaptation des URLs');
-                // Utiliser l'URL actuelle comme base pour éviter les problèmes CORS
-                baseUrl = window.location.origin;
+            // Détecter si on est dans un environnement de prévisualisation (ex: Cascade)
+            if (window.location.ancestorOrigins && window.location.ancestorOrigins.length > 0) {
+                const previewOrigin = window.location.ancestorOrigins[0];
+                if (previewOrigin.includes('localhost') || previewOrigin.includes('127.0.0.1')) {
+                    this.config.logger('Environnement de prévisualisation détecté, utilisation de fetch direct vers le backend');
+                    // Forcer le mode direct pour éviter le proxy de l'aperçu qui ne gère pas les POST
+                    this.config.mode = 'direct';
+                }
             }
-            
-            console.log(`URL de base utilisée: ${baseUrl}`);
             
             // Selon le mode, utiliser la méthode appropriée
             if (this.config.mode === 'iframe') {

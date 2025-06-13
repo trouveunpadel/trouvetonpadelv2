@@ -6,26 +6,48 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Récupérer les éléments du DOM
     const themeSwitcher = document.getElementById('theme-switcher');
+    const themeSwitcherMobile = document.getElementById('theme-switcher-mobile');
     const htmlElement = document.documentElement;
     
     // Vérifier si un thème est déjà enregistré dans le localStorage
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem('theme') || 'dark';
     
-    // Appliquer le thème sauvegardé ou utiliser le thème par défaut (dark)
-    if (savedTheme) {
-        applyTheme(savedTheme);
+    // Appliquer le thème sauvegardé
+    applyTheme(savedTheme);
+    
+    // Mettre à jour l'état des switches
+    if (themeSwitcher) {
         themeSwitcher.checked = savedTheme === 'light';
-    } else {
-        applyTheme('dark');
-        themeSwitcher.checked = false;
+        
+        // Ajouter un écouteur d'événement pour le changement de thème
+        themeSwitcher.addEventListener('change', function() {
+            const newTheme = this.checked ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Synchroniser l'autre switch si présent
+            if (themeSwitcherMobile) {
+                themeSwitcherMobile.checked = this.checked;
+            }
+        });
     }
     
-    // Ajouter un écouteur d'événement pour le changement de thème
-    themeSwitcher.addEventListener('change', function() {
-        const newTheme = this.checked ? 'light' : 'dark';
-        applyTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-    });
+    // Configurer le switch mobile si présent
+    if (themeSwitcherMobile) {
+        themeSwitcherMobile.checked = savedTheme === 'light';
+        
+        // Ajouter un écouteur d'événement pour le changement de thème
+        themeSwitcherMobile.addEventListener('change', function() {
+            const newTheme = this.checked ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Synchroniser l'autre switch si présent
+            if (themeSwitcher) {
+                themeSwitcher.checked = this.checked;
+            }
+        });
+    }
     
     // Fonction pour appliquer le thème
     function applyTheme(theme) {

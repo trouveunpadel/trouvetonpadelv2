@@ -268,59 +268,41 @@ async function searchAvailableSlots(dateStr, startHour, endHour, latitude, longi
         return hours >= startHour && hours <= endHour;
       });
       
-      // Ajouter des informations sur le club
+      // Mapper explicitement les propriétés pour éviter les références circulaires
       const slotsWithClubInfo = filteredSlots.map(slot => {
-        // S'assurer que les propriétés essentielles sont présentes et correctement formatées
-        const enhancedSlot = {
-          ...slot,
+        const courtName = slot.court ? String(slot.court).toLowerCase() : '';
+        let courtType = slot.courtType || slot.type || 'non spécifié';
+
+        if (club.id === 'countryclubpadel') {
+          if (courtName.includes('1') || courtName.includes('2') || courtName.includes('couvert') || courtName.includes('intérieur')) {
+            courtType = 'intérieur';
+          } else if (courtName.includes('3') || courtName.includes('4') || courtName.includes('extérieur')) {
+            courtType = 'extérieur';
+          }
+        }
+
+        let reservationLink = slot.reservationLink || '';
+        if (!reservationLink && club.id === 'complexepadel' && slot.serviceId && slot.date && slot.time) {
+          reservationLink = `https://www.lecomplexe-salon.com/padel/?service=${slot.serviceId}&date=${slot.date}&time=${slot.time}`;
+        }
+
+        return {
+          id: slot.id,
           clubName: club.name,
           clubId: club.id,
           distance: calculateDistance(latitude, longitude, club.latitude, club.longitude).toFixed(1),
           address: club.address,
-          coordinates: {
-            latitude: club.latitude,
-            longitude: club.longitude
-          }
+          coordinates: { latitude: club.latitude, longitude: club.longitude },
+          date: slot.date,
+          time: slot.time,
+          endTime: slot.endTime,
+          court: slot.court,
+          price: slot.price,
+          available: slot.available,
+          type: courtType, // Utiliser la variable déterminée
+          courtType: courtType, // Assurer la cohérence
+          reservationLink: reservationLink
         };
-        
-        // S'assurer que le type est correctement défini
-        if (!enhancedSlot.type || enhancedSlot.type === '') {
-          enhancedSlot.type = club.id === 'complexepadel' ? 'intérieur' : 'non spécifié';
-        }
-        
-        // S'assurer que courtType est correctement défini (pour uniformiser entre les clubs)
-        if (!enhancedSlot.courtType || enhancedSlot.courtType === '') {
-          // Si courtType n'existe pas mais que type existe, utiliser type
-          if (club.id === 'countryclubpadel') {
-            // Pour Country Club Padel, forcer le type de terrain en fonction du nom du court
-            const courtName = slot.court ? slot.court.toLowerCase() : '';
-            if (courtName.includes('1') || courtName.includes('2') || 
-                courtName.includes('couvert') || courtName.includes('intérieur')) {
-              enhancedSlot.courtType = 'intérieur';
-              console.log(`Country Club Padel: Court ${slot.court} -> Type forcé: intérieur`);
-            } else if (courtName.includes('3') || courtName.includes('4') || 
-                     courtName.includes('extérieur')) {
-              enhancedSlot.courtType = 'extérieur';
-              console.log(`Country Club Padel: Court ${slot.court} -> Type forcé: extérieur`);
-            } else {
-              enhancedSlot.courtType = slot.courtType || 'non spécifié';
-            }
-          } else {
-            enhancedSlot.courtType = enhancedSlot.type || (club.id === 'complexepadel' ? 'intérieur' : 'non spécifié');
-          }
-        } else if (enhancedSlot.courtType && !enhancedSlot.type) {
-          // Si type n'existe pas mais que courtType existe, utiliser courtType
-          enhancedSlot.type = enhancedSlot.courtType;
-        }
-        
-        // S'assurer que le lien de réservation est correctement défini
-        if (!enhancedSlot.reservationLink || enhancedSlot.reservationLink === '') {
-          if (club.id === 'complexepadel' && enhancedSlot.serviceId && enhancedSlot.date && enhancedSlot.time) {
-            enhancedSlot.reservationLink = `https://www.lecomplexe-salon.com/padel/?service=${enhancedSlot.serviceId}&date=${enhancedSlot.date}&time=${enhancedSlot.time}`;
-          }
-        }
-        
-        return enhancedSlot;
       });
       
       console.log(`${filteredSlots.length} créneaux trouvés pour ${club.name}`);

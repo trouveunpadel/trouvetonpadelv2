@@ -6,7 +6,7 @@
 const express = require('express');
 const cors = require('cors');
 // Charger les variables d'environnement avant d'importer les modules
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '.env') });
 // Importer le module de créneaux
 const crenauxRoutes = require('./crenaux/server');
 

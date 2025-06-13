@@ -12,6 +12,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const latitude = urlParams.get('latitude');
     const longitude = urlParams.get('longitude');
     
+    // Afficher la date de recherche dans le header
+    if (date) {
+        // Format complet pour desktop
+        const searchDateFormattedDesktop = new Date(date).toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // Format court pour mobile (sans jour de la semaine)
+        const searchDateFormattedMobile = new Date(date).toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+        
+        // Header desktop
+        const searchDateElement = document.getElementById('search-date-display');
+        if (searchDateElement) {
+            searchDateElement.textContent = searchDateFormattedDesktop;
+        }
+        
+        // Header mobile
+        const searchDateElementMobile = document.getElementById('search-date-display-mobile');
+        if (searchDateElementMobile) {
+            searchDateElementMobile.textContent = searchDateFormattedMobile;
+        }
+    }
+    
     // Vérifier que les paramètres nécessaires sont présents
     if (!date || !time || !radius) {
         document.getElementById('results-container').innerHTML = `
@@ -69,26 +99,26 @@ async function fetchResults(requestData) {
         let response;
         
         // Vérifier si le client proxy est disponible
-        if (typeof ProxyClient !== 'undefined') {
+        if (window.apiProxy) {
             console.log('Utilisation du client proxy pour la requête API');
             
             try {
-                const apiResult = await ProxyClient.post('/api/search', requestData);
+                // Utiliser l'instance window.apiProxy et l'endpoint sans /api
+                const apiResult = await window.apiProxy.post('/search', requestData);
                 
                 // Convertir la réponse du proxy en objet Response standard
                 response = {
                     ok: apiResult.ok,
-                    status: apiResult.status || 200,
-                    statusText: '',
+                    status: apiResult.status,
+                    statusText: apiResult.ok ? 'OK' : 'Error',
                     json() {
                         return Promise.resolve(apiResult.data);
                     }
                 };
             } catch (error) {
-                console.error('Erreur lors de l\'appel via le proxy:', error);
+                console.error('Erreur lors de l\'appel via le proxy, tentative avec fetch direct:', error);
                 
-                // Essayer la méthode directe en cas d'échec du proxy
-                console.log('Tentative avec fetch direct après échec du proxy');
+                // En cas d'échec du proxy, on se rabat sur fetch direct
                 response = await fetch('http://localhost:3000/api/search', {
                     method: 'POST',
                     headers: {
@@ -101,7 +131,7 @@ async function fetchResults(requestData) {
                 });
             }
         } else {
-            console.log('Client proxy non disponible, utilisation de fetch directement');
+            console.error('Client proxy non disponible, utilisation de fetch directement. Cela causera une erreur CORS.');
             
             // URL complète de l'API backend
             const apiUrl = 'http://localhost:3000/api/search';

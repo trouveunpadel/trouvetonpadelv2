@@ -226,7 +226,7 @@ main {
     color: #000;
     border: none;
     border-radius: 4px;
-    padding: 10px 20px;
+    padding: 4px 12px;
     font-weight: 600;
     text-align: center;
     font-size: 13px;
@@ -473,8 +473,9 @@ main {
     background-color: #d1e8f8;
 }
 
-/* Responsive */
+/* Media query pour mobile */
 @media (max-width: 768px) {
+    /* Styles mobile */
     .club-card {
         flex-direction: column;
         border-radius: 0;
@@ -598,12 +599,272 @@ main {
     
     .btn-sm.btn-outline-primary {
         padding: 0.1rem 0.3rem !important;
-        font-size: 0.6rem !important;
+        font-size: 0.9rem !important;
         margin-right: 6px !important;
     }
     
     .badge {
         font-size: 0.65rem;
         padding: 0.2em 0.4em;
+    }
+}
+
+/* ========================================
+   STYLES MOBILE - Ajout sans modification du desktop
+   ======================================== */
+
+/* Styles pour l'affichage mobile en liste */
+@media (max-width: 768px) {
+    /* Container mobile */
+    .mobile-results-container {
+        padding: 0;
+        background-color: #000000;
+    }
+    
+    .mobile-results-count {
+        color: #ccc;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        margin: 12px 0;
+    }
+    
+    /* Liste des créneaux mobile */
+    .mobile-slots-list {
+        padding: 0;
+    }
+    
+    /* Carte de créneau mobile - Design exact comme image 2 */
+    .mobile-slot-card {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #333;
+        margin: 0;
+        padding: 16px;
+        border-radius: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: relative;
+    }
+    
+    .mobile-slot-card:hover {
+        background-color: #222;
+        border-color: #333;
+        transform: none;
+        box-shadow: none;
+    }
+    
+    /* Partie gauche de la carte */
+    .mobile-slot-left {
+        flex: 1;
+    }
+    
+    .mobile-slot-club {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+    
+    .mobile-slot-court {
+        color: #ccc;
+        font-size: 16px;
+        margin-bottom: 4px;
+    }
+    
+    .mobile-slot-location {
+        color: #999;
+        font-size: 14px;
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .mobile-distance, .mobile-wind-info {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #C6FF00; /* Couleur lime pour la distance et l'icône voiture */
+        font-weight: 500;
+    }
+    
+    .mobile-distance .icon {
+        width: 14px;
+        height: 14px;
+        color: #C6FF00;
+    }
+    
+    /* Partie droite de la carte */
+    .mobile-slot-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+        min-width: 65px;
+    }
+    
+    .mobile-slot-time {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    
+    .mobile-slot-type {
+        color: #999;
+        font-size: 14px;
+        text-align: right;
+    }
+    
+    /* Informations météo et distance */
+    .mobile-weather-info {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 2px;
+    }
+    
+    .mobile-wind-info {
+        color: #999;
+        font-size: 12px;
+    }
+    
+    .mobile-weather-icon {
+        width: 26px;
+        height: 26px;
+    }
+    
+    .mobile-weather-temp {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    /* Bouton de réservation mobile */
+    .mobile-reserve-btn {
+        background: #C6FF00;
+        color: #000000;
+        border: none;
+        padding: 4px 35px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 12px;
+        margin-top: 15px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-transform: none;
+        letter-spacing: normal;
+        min-width: auto;
+        position: relative;
+        overflow: hidden;
+        box-shadow: none;
+    }
+    
+    .mobile-reserve-btn::before {
+        display: none;
+    }
+    
+    .mobile-reserve-btn:hover::before {
+        display: none;
+    }
+    
+    .mobile-reserve-btn:active {
+        background: #A8E600;
+        transform: scale(0.98);
+        box-shadow: none;
+    }
+    
+    /* Filtres mobiles */
+    .mobile-results-container {
+        padding: 0;
+        background-color: #000000;
+    }
+    
+    .mobile-results-header {
+        background-color: #000;
+        padding: 0;
+        border-bottom: none;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    
+    /* Filtres mobiles horizontaux - Type */
+    .mobile-filters:first-child {
+        display: flex;
+        margin: 8px 12px;
+        background-color: #222;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        padding: 2px;
+        height: 32px;
+    }
+    
+    .mobile-filters:first-child .mobile-filter-btn {
+        flex: 1;
+        background-color: transparent;
+        color: #aaa;
+        border: none;
+        padding: 6px 0;
+        font-size: 13px;
+        font-weight: 400;
+        border-radius: 10px;
+        margin: 0;
+        transition: all 0.2s ease;
+        letter-spacing: 0.3px;
+        line-height: 1;
+    }
+    
+    .mobile-filters:first-child .mobile-filter-btn.active {
+        background-color: #444;
+        color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Filtres mobiles horizontaux - Clubs */
+    .mobile-filters:nth-child(2) {
+        display: flex;
+        gap: 6px;
+        margin: 12px 0 16px;
+        padding: 0 12px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+    
+    /* Masquer la scrollbar pour Chrome/Safari */
+    .mobile-filters:nth-child(2)::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .mobile-filters:nth-child(2) .mobile-filter-btn {
+        background-color: rgba(40, 40, 40, 0.8);
+        color: #bbb;
+        border: 1px solid #444;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        line-height: 1.2;
+        height: 24px;
+    }
+    
+    .mobile-filters:nth-child(2) .mobile-filter-btn.active {
+        background-color: #C6FF00; /* Couleur lime du logo */
+        color: #000000 !important; /* Texte noir, !important pour surcharger */
+        border-color: #C6FF00;
+    }
+}
+
+/* Masquer l'affichage mobile sur desktop */
+@media (min-width: 769px) {
+    .mobile-results-container,
+    .mobile-slots-list,
+    .mobile-slot-card {
+        display: none !important;
     }
 }
