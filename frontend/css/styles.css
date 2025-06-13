@@ -81,14 +81,6 @@ body {
   margin: 0 auto 2rem;
 }
 
-.text-white {
-  color: rgb(0, 0, 0) !important;
-}
-
-.text-muted {
-  color: #fff !important;
-}
-
 /* Styles pour la carte avec effet de retournement */
 .card-container {
   perspective: 1000px;
