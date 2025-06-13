@@ -46,7 +46,7 @@ main {
 
 /* Section des résultats */
 .results-section {
-    padding: 20px 0 40px;
+    padding: 10px 0 40px;
     background-color: #333333;
     min-height: 400px;
 }
@@ -615,6 +615,12 @@ main {
 
 /* Styles pour l'affichage mobile en liste */
 @media (max-width: 768px) {
+    /* Supprimer le padding du container Bootstrap sur mobile */
+    .results-section .container {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
     /* Container mobile */
     .mobile-results-container {
         padding: 0;
@@ -640,7 +646,7 @@ main {
         border: none;
         border-bottom: 1px solid #333;
         margin: 0;
-        padding: 16px;
+        padding: 16px 5px;
         border-radius: 0;
         display: flex;
         justify-content: space-between;
@@ -793,7 +799,7 @@ main {
     /* Filtres mobiles horizontaux - Type */
     .mobile-filters:first-child {
         display: flex;
-        margin: 8px 12px;
+        margin: 8px 0px;
         background-color: #222;
         border-radius: 12px;
         overflow: hidden;
@@ -828,7 +834,6 @@ main {
         display: flex;
         gap: 6px;
         margin: 12px 0 16px;
-        padding: 0 12px;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none; /* Firefox */

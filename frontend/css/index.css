@@ -1,0 +1,49 @@
+/* 
+ * CSS spécifique pour la page d'accueil (index.html)
+ * Ajustement du padding-top pour le nouveau header mobile
+ */
+
+/* Ajustement du padding-top pour mobile sur la page d'accueil */
+@media (max-width: 768px) {
+    body {
+        padding-top: 40px !important; /* Réduit à 40px comme demandé */
+    }
+    
+    /* Raccourcir le texte des boutons de recherche sur mobile */
+    #slots-tab {
+        font-size: 0 !important; /* Masquer le texte original */
+    }
+    
+    #slots-tab::after {
+        content: "Créneau";
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    #slots-tab i {
+        font-size: 16px !important;
+        margin-right: 8px !important;
+    }
+    
+    #tournaments-tab {
+        font-size: 0 !important; /* Masquer le texte original */
+    }
+    
+    #tournaments-tab::after {
+        content: "Tournoi";
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    #tournaments-tab i {
+        font-size: 16px !important;
+        margin-right: 8px !important;
+    }
+}
+
+/* Ajustement pour très petits écrans */
+@media (max-width: 400px) {
+    body {
+        padding-top: 40px !important;
+    }
+}
