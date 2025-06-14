@@ -194,3 +194,33 @@
         font-size: 0.8rem !important;
     }
 }
+
+/* Icônes noires en mode dark uniquement */
+[data-bs-theme="dark"] i {
+    color: #000000 !important;
+}
+
+/* Améliorer la visibilité des cartes de fonctionnalités en mode light desktop */
+@media (min-width: 769px) {
+    html:not([data-bs-theme="dark"]) .card.h-100.border-0.shadow-sm {
+        border: 2px solid #e9ecef !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        background-color: #ffffff !important;
+    }
+    
+    html:not([data-bs-theme="dark"]) .card.h-100.border-0.shadow-sm:hover {
+        border-color: #dee2e6 !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+    
+    html:not([data-bs-theme="dark"]) .card.h-100.border-0.shadow-sm .card-title {
+        color: #212529 !important;
+        font-weight: 600 !important;
+    }
+    
+    html:not([data-bs-theme="dark"]) .card.h-100.border-0.shadow-sm .card-text {
+        color: #6c757d !important;
+    }
+}
