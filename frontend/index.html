@@ -157,7 +157,16 @@
                                                     <div class="invalid-feedback">Veuillez choisir une date de fin</div>
                                                 </div>
 
-                                                <div class="col-12">
+                                                <div class="col-12 mb-3">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <label class="form-check-label fw-bold" for="tournament-use-location-toggle">Utiliser ma position actuelle</label>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" id="tournament-use-location-toggle" style="transform: scale(1.6); margin-left: 0.5rem;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-12" id="tournament-city-input-container">
                                                     <label for="tournament-city" class="form-label">Ville</label>
                                                     <input type="text" id="tournament-city" class="form-control" placeholder="Marseille, Aix-en-Provence..." required>
                                                     <div class="invalid-feedback">Veuillez entrer une ville</div>
@@ -165,10 +174,10 @@
 
                                                 <div class="col-12">
                                                     <label for="tournament-radius" class="form-label">Rayon: <span id="tournament-radius-value" class="fw-bold">20</span> km</label>
-                                                    <input type="range" id="tournament-radius" class="form-range" min="5" max="30" step="5" value="20">
+                                                    <input type="range" class="form-range" id="tournament-radius" name="tournament-radius" min="10" max="50" value="20" step="5" oninput="document.getElementById('tournament-radius-value').textContent = this.value">
                                                     <div class="d-flex justify-content-between small text-muted">
-                                                        <span>5 km</span>
-                                                        <span>30 km</span>
+                                                        <span>10 km</span>
+                                                        <span>50 km</span>
                                                     </div>
                                                 </div>
 
@@ -274,7 +283,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/proxy-client.js"></script>
-    <!-- Scripts modulaires - Ordre important pour les dépendances -->
     <script src="js/location-services.js"></script>
     <script src="js/ui-components.js"></script>
     <script src="js/form-validation.js"></script>
@@ -286,5 +294,14 @@
     <!-- Les fichiers JS ont été fusionnés :
          - location-service-new.js + location-toggle.js -> location-services.js
          - modal.js + theme-switcher.js + ui.js -> ui-components.js -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.location.hash === '#tournois') {
+                var tab = new bootstrap.Tab(document.getElementById('tournaments-tab'));
+                tab.show();
+            }
+        });
+    </script>
 </body>
 </html>

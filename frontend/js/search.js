@@ -293,8 +293,37 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Ville:', city);
             console.log('Rayon:', radius, 'km');
             
-            // Fonctionnalité à implémenter
-            alert('La recherche de tournois sera disponible prochainement !');
+                        const useGeolocation = document.getElementById('tournament-use-location-toggle') && document.getElementById('tournament-use-location-toggle').checked;
+
+            if (useGeolocation) {
+                // Cas 1: L'utilisateur utilise la géolocalisation
+                console.log('Utilisation de la géolocalisation pour la recherche de tournois.');
+                LocationService.getUserPosition()
+                    .then(position => {
+                        const url = `tournaments.html?city=Position%20actuelle&startDate=${startDate}&endDate=${endDate}&radius=${radius}&lat=${position.latitude}&lng=${position.longitude}`;
+                        window.location.href = url;
+                    })
+                    .catch(error => {
+                        console.error('Erreur de géolocalisation:', error);
+                        alert('Impossible d\'obtenir votre position. Veuillez saisir une ville à la place.');
+                    });
+
+            } else if (city) {
+                // Cas 2: L'utilisateur a saisi une ville
+                console.log(`Géocodage de "${city}" pour la recherche de tournois.`);
+                LocationService.getCoordinatesFromCity(city)
+                    .then(coords => {
+                        const url = `tournaments.html?city=${encodeURIComponent(city)}&startDate=${startDate}&endDate=${endDate}&radius=${radius}&lat=${coords.latitude}&lng=${coords.longitude}`;
+                        window.location.href = url;
+                    })
+                    .catch(error => {
+                        console.error('Erreur de géocodage:', error);
+                        alert('Ville introuvable. Veuillez vérifier l\'orthographe ou essayer une autre ville.');
+                    });
+            } else {
+                // Cas 3: Ni géoloc, ni ville
+                alert('Veuillez utiliser votre position ou saisir une ville pour rechercher un tournoi.');
+            }
         });
     }
 });

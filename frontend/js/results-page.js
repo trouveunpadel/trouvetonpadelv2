@@ -104,7 +104,7 @@ async function fetchResults(requestData) {
             
             try {
                 // Utiliser l'instance window.apiProxy et l'endpoint sans /api
-                const apiResult = await window.apiProxy.post('/search', requestData);
+                const apiResult = await window.apiProxy.post('/creneaux/search', requestData);
                 
                 // Convertir la réponse du proxy en objet Response standard
                 response = {
@@ -134,7 +134,7 @@ async function fetchResults(requestData) {
             console.error('Client proxy non disponible, utilisation de fetch directement. Cela causera une erreur CORS.');
             
             // URL complète de l'API backend
-            const apiUrl = 'http://localhost:3000/api/search';
+            const apiUrl = 'http://localhost:3000/api/creneaux/search';
             
             // Effectuer la requête avec fetch
             response = await fetch(apiUrl, {

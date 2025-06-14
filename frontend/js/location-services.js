@@ -7,6 +7,40 @@ const LocationService = {
     // État du service
     userPosition: null,
     isLocating: false,
+    geocodeCache: {}, // Cache pour les résultats de géocodage de la session
+    knownCities: {}, // Cache des villes locales chargées depuis le JSON
+    _knownCitiesPromise: null, // Promesse pour le chargement du fichier
+
+    /**
+     * Charge les villes connues depuis un fichier JSON.
+     * Ne s'exécute qu'une seule fois.
+     * @returns {Promise} Promesse résolue avec l'objet des villes connues.
+     */
+    _loadKnownCities: function() {
+        if (!this._knownCitiesPromise) {
+            this._knownCitiesPromise = fetch('data/cities.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erreur réseau: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    this.knownCities = data;
+                    console.log("Cache de villes locales chargé avec succès.");
+                    return this.knownCities;
+                })
+                .catch(error => {
+                    console.error("Impossible de charger le fichier de villes locales (cities.json). Le service fonctionnera sans ce cache.", error);
+                    this.knownCities = {}; // Assurer un objet vide en cas d'échec
+                    return this.knownCities;
+                });
+        }
+        return this._knownCitiesPromise;
+    },
+    // État du service
+    userPosition: null,
+    isLocating: false,
     geocodeCache: {}, // Cache pour les résultats de géocodage
     
     /**
@@ -52,68 +86,58 @@ const LocationService = {
      * @param {string} city - Nom de la ville
      * @returns {Promise} Promesse résolue avec les coordonnées {latitude, longitude}
      */
-    getCoordinatesFromCity: function(city) {
+    getCoordinatesFromCity: async function(city) {
         // Validation de l'entrée
         if (!city || typeof city !== 'string' || city.trim() === '') {
-            return Promise.reject(new Error('Nom de ville invalide ou manquant'));
+                        throw new Error('Nom de ville invalide ou manquant');
         }
-        
+
+                const normalizedCity = city.toLowerCase().trim();
         console.log('Géocodage de la ville:', city);
-        
-        // Si la ville est déjà dans le cache, on retourne les coordonnées directement
-        if (this.geocodeCache[city]) {
-            console.log('Coordonnées trouvées dans le cache:', this.geocodeCache[city]);
-            return Promise.resolve(this.geocodeCache[city]);
+
+        // 1. Vérifier le cache de session
+        if (this.geocodeCache[normalizedCity]) {
+            console.log('Coordonnées trouvées dans le cache de session:', this.geocodeCache[normalizedCity]);
+            return this.geocodeCache[normalizedCity];
         }
 
-        // Base de données locale des principales villes françaises
-        const knownCities = {
-            'paris': { latitude: 48.8566, longitude: 2.3522, displayName: 'Paris, France' },
-            'marseille': { latitude: 43.2965, longitude: 5.3698, displayName: 'Marseille, France' },
-            'lyon': { latitude: 45.7578, longitude: 4.8320, displayName: 'Lyon, France' },
-            'toulouse': { latitude: 43.6047, longitude: 1.4442, displayName: 'Toulouse, France' },
-            'nice': { latitude: 43.7102, longitude: 7.2620, displayName: 'Nice, France' },
-            'nantes': { latitude: 47.2184, longitude: -1.5536, displayName: 'Nantes, France' },
-            'strasbourg': { latitude: 48.5734, longitude: 7.7521, displayName: 'Strasbourg, France' },
-            'montpellier': { latitude: 43.6108, longitude: 3.8767, displayName: 'Montpellier, France' },
-            'bordeaux': { latitude: 44.8378, longitude: -0.5792, displayName: 'Bordeaux, France' },
-            'lille': { latitude: 50.6292, longitude: 3.0573, displayName: 'Lille, France' },
-            'eyguieres': { latitude: 43.695131, longitude: 5.0297213, displayName: 'Eyguières, France' },
-            'mallemort': { latitude: 43.7406, longitude: 5.1825, displayName: 'Mallemort, France' },
-            'istres': { latitude: 43.5139051, longitude: 4.9884323, displayName: "Istres, Bouches-du-Rhône, Provence-Alpes-Côte d'Azur, France métropolitaine, France" }
-        };
-        
-        const normalizedCity = city.toLowerCase().trim();
+        // 2. Attendre que le fichier des villes locales soit chargé et vérifier dedans
+        const knownCities = await this._loadKnownCities();
         if (knownCities[normalizedCity]) {
-            console.log('Utilisation de coordonnées locales pour:', city);
-            this.geocodeCache[city] = knownCities[normalizedCity];
-            return Promise.resolve(knownCities[normalizedCity]);
+            console.log('Utilisation de coordonnées du cache local (fichier) pour:', city);
+            this.geocodeCache[normalizedCity] = knownCities[normalizedCity];
+            return knownCities[normalizedCity];
         }
 
-        // Dans l'environnement de prévisualisation, nous évitons d'utiliser l'API Nominatim
-        // et utilisons uniquement notre base de données locale
-        console.log('Recherche locale pour:', city);
-        
-        // Position par défaut pour la France
-        const defaultPosition = { 
-            latitude: 46.603354, 
-            longitude: 1.888334, 
-            displayName: 'France (position approximative)' 
-        };
-        
-        // Recherche d'une correspondance partielle dans notre base locale
-        for (const [knownCity, coords] of Object.entries(knownCities)) {
-            if (city.toLowerCase().includes(knownCity) || knownCity.includes(city.toLowerCase())) {
-                console.log(`Utilisation des coordonnées de ${knownCity} pour ${city}`);
-                this.geocodeCache[city] = coords;
-                return Promise.resolve(coords);
-            }
+        // 3. Si pas dans les caches, appel à l'API Nominatim via le proxy
+            const endpoint = `geocode?city=${encodeURIComponent(city)}`;
+    console.log('Appel API Nominatim via proxy:', endpoint);
+
+    // Vérifier que window.apiProxy est disponible
+    if (!window.apiProxy) {
+        throw new Error('Le service de proxy API n\'est pas encore initialisé. Veuillez réessayer dans quelques secondes.');
+    }
+
+    const response = await window.apiProxy.get(endpoint);
+    if (!response.ok) {
+        // apiProxy rejette déjà en cas d'erreur réseau majeure, ici on gère les erreurs HTTP (4xx, 5xx)
+        throw new Error(`Erreur de l'API de géocodage: ${response.status} - ${response.data.message || response.statusText}`);
+    }
+
+    const dataFromApi = response.data;
+    if (dataFromApi && dataFromApi.length > 0) {
+            const result = dataFromApi[0];
+            const coordinates = {
+                latitude: parseFloat(result.lat),
+                longitude: parseFloat(result.lon),
+                displayName: result.display_name
+            };
+            console.log('Coordonnées obtenues via API:', coordinates);
+            this.geocodeCache[normalizedCity] = coordinates; // Mise en cache de session
+            return coordinates;
+        } else {
+            throw new Error(`La ville "${city}" n'a pas pu être trouvée.`);
         }
-        
-        // Si aucune correspondance n'est trouvée, utiliser la position par défaut
-        console.log('Aucune correspondance trouvée, utilisation de la position par défaut pour la France');
-        this.geocodeCache[city] = defaultPosition;
-        return Promise.resolve(defaultPosition);
     },
     
     /**
@@ -170,6 +194,9 @@ const LocationService = {
         return distance <= radius;
     }
 };
+
+// Initialiser le chargement du cache de villes dès que le script est lu.
+LocationService._loadKnownCities();
 
 // Exposer le service globalement
 window.LocationService = LocationService;
@@ -301,4 +328,118 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialisation de l'interface
     updateInterface();
+
+    // ========================================
+    // GESTION DE LA LOCALISATION POUR LES TOURNOIS
+    // ========================================
+    
+    // Éléments pour les tournois
+    const tournamentLocationToggle = document.getElementById('tournament-use-location-toggle');
+    const tournamentCityInput = document.getElementById('tournament-city');
+    const tournamentCityContainer = document.getElementById('tournament-city-input-container');
+    const tournamentForm = document.getElementById('tournament-form');
+    
+    // État initial pour les tournois
+    let useTournamentGeolocation = false;
+    
+    // Fonction pour mettre à jour l'interface des tournois
+    function updateTournamentInterface() {
+        if (tournamentCityContainer) {
+            if (useTournamentGeolocation) {
+                // Masquer le champ ville
+                tournamentCityContainer.style.display = 'none';
+                // Retirer l'attribut required
+                if (tournamentCityInput) {
+                    tournamentCityInput.removeAttribute('required');
+                }
+            } else {
+                // Afficher le champ ville
+                tournamentCityContainer.style.display = 'block';
+                // Ajouter l'attribut required
+                if (tournamentCityInput) {
+                    tournamentCityInput.setAttribute('required', '');
+                }
+            }
+        }
+    }
+    
+    // Écouteur d'événement pour le toggle des tournois
+    if (tournamentLocationToggle) {
+        tournamentLocationToggle.addEventListener('change', function() {
+            useTournamentGeolocation = this.checked;
+            updateTournamentInterface();
+            
+            if (useTournamentGeolocation) {
+                // Demander la permission de géolocalisation dès que l'utilisateur active le toggle
+                LocationService.getUserPosition()
+                    .then(position => {
+                        console.log('Géolocalisation tournois activée, position obtenue:', position);
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la géolocalisation tournois:', error);
+                        // En cas d'erreur, revenir au mode ville
+                        useTournamentGeolocation = false;
+                        tournamentLocationToggle.checked = false;
+                        updateTournamentInterface();
+                        
+                        // Afficher notre popup personnalisée
+                        customModal.show('Géolocalisation impossible', 'Impossible d\'obtenir votre position. Veuillez autoriser la géolocalisation ou saisir une ville.');
+                    });
+            }
+        });
+    }
+    
+    // Écouteur d'événement pour le formulaire de tournois
+    if (tournamentForm) {
+        tournamentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            if (useTournamentGeolocation && !LocationService.userPosition) {
+                customModal.show('Géolocalisation requise', 'Veuillez autoriser la géolocalisation ou saisir une ville.');
+                return false;
+            }
+
+            if (!useTournamentGeolocation && !tournamentCityInput.value.trim()) {
+                customModal.show('Ville manquante', 'Veuillez saisir une ville.', () => tournamentCityInput.focus());
+                return false;
+            }
+
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            const radius = document.getElementById('tournament-radius').value;
+
+            if (!startDate || !endDate) {
+                customModal.show('Dates manquantes', 'Veuillez sélectionner les dates de début et de fin.');
+                return false;
+            }
+            if (new Date(startDate) > new Date(endDate)) {
+                customModal.show('Dates invalides', 'La date de début doit être antérieure à la date de fin.');
+                return false;
+            }
+
+            const redirectToResults = (coords, city) => {
+                let redirectUrl = `tournaments.html?city=${encodeURIComponent(city)}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&radius=${encodeURIComponent(radius)}&lat=${coords.lat}&lng=${coords.lng}`;
+                window.location.href = redirectUrl;
+            };
+
+            if (useTournamentGeolocation && LocationService.userPosition) {
+                const coords = { lat: LocationService.userPosition.latitude, lng: LocationService.userPosition.longitude };
+                redirectToResults(coords, 'Position actuelle');
+            } else if (!useTournamentGeolocation && tournamentCityInput.value.trim()) {
+                const city = tournamentCityInput.value.trim();
+                LocationService.getCoordinatesFromCity(city)
+                    .then(coords => {
+                        redirectToResults({ lat: coords.latitude, lng: coords.longitude }, city);
+                    })
+                    .catch(error => {
+                        console.error('Erreur de géocodage tournois:', error);
+                        customModal.show('Ville introuvable', 'Impossible de localiser cette ville. Veuillez vérifier l\'orthographe ou essayer une autre ville.');
+                    });
+            }
+            return false;
+        });
+    }
+    
+    // Initialisation de l'interface des tournois
+    updateTournamentInterface();
 });

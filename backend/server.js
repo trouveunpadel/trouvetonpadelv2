@@ -7,23 +7,19 @@ const express = require('express');
 const cors = require('cors');
 // Charger les variables d'environnement avant d'importer les modules
 require('dotenv').config({ path: require('path').join(__dirname, '.env') });
-// Importer le module de créneaux
+// Importer les modules de routes
 const crenauxRoutes = require('./crenaux/server');
+const tournoisRoutes = require('./tournois/server'); // Importer le routeur des tournois
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware avec configuration CORS détaillée
 app.use((req, res, next) => {
-  const allowedOrigins = [
-    'http://localhost:8080',
-    'http://127.0.0.1:8080',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000'
-  ];
-  
   const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
+  
+  // Accepter toutes les origines localhost et 127.0.0.1 sur n'importe quel port
+  if (origin && (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:'))) {
     res.header('Access-Control-Allow-Origin', origin);
   } else {
     res.header('Access-Control-Allow-Origin', '*');
@@ -64,8 +60,37 @@ app.get('/api/status', (req, res) => {
   res.json({ status: 'online', version: '1.0.0' });
 });
 
-// Utiliser le module de créneaux pour toutes les routes /api
-app.use('/api', crenauxRoutes);
+// Route de proxy pour le géocodage afin d'éviter les problèmes de CORS
+app.get('/api/geocode', async (req, res) => {
+    const city = req.query.city;
+    if (!city) {
+        return res.status(400).json({ error: 'Le paramètre city est manquant.' });
+    }
+
+    try {
+        // Dynamically import axios
+        const axios = (await import('axios')).default;
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}, France&limit=1`;
+        
+        console.log(`[Geocode Proxy] Appel de l'API Nominatim pour: ${city}`);
+        const response = await axios.get(url, {
+            headers: {
+                'User-Agent': 'TrouveTonPadel/1.0 (https://github.com/votre-repo)' // L'API Nominatim requiert un User-Agent
+            }
+        });
+
+        res.json(response.data);
+
+    } catch (error) {
+        console.error("[Geocode Proxy] Erreur lors de l'appel à l'API Nominatim:", error.message);
+        res.status(500).json({ error: 'Erreur lors de la communication avec le service de géocodage.' });
+    }
+});
+
+// Utiliser les routeurs pour les chemins d'API spécifiques
+app.use('/api/creneaux', crenauxRoutes);
+app.use('/api/tournois', tournoisRoutes);
+
 
 // Démarrer le serveur
 app.listen(PORT, () => {

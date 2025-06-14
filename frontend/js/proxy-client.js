@@ -8,7 +8,7 @@ class TrouveTonPadelProxy {
         // Configuration par défaut
         this.config = {
             // URL du backend (utilisée en mode direct)
-            backendUrl: 'http://localhost:3000',
+            backendUrl: 'http://127.0.0.1:3000',
             // URL du serveur proxy (utilisée en mode proxy serveur)
             proxyServerUrl: 'http://localhost:8090',
             // Mode de fonctionnement: 'iframe', 'server', 'direct'

@@ -1,0 +1,15 @@
+{
+    "paris": { "latitude": 48.8566, "longitude": 2.3522, "displayName": "Paris, France" },
+    "marseille": { "latitude": 43.2965, "longitude": 5.3698, "displayName": "Marseille, France" },
+    "lyon": { "latitude": 45.7578, "longitude": 4.8320, "displayName": "Lyon, France" },
+    "toulouse": { "latitude": 43.6047, "longitude": 1.4442, "displayName": "Toulouse, France" },
+    "nice": { "latitude": 43.7102, "longitude": 7.2620, "displayName": "Nice, France" },
+    "nantes": { "latitude": 47.2184, "longitude": -1.5536, "displayName": "Nantes, France" },
+    "strasbourg": { "latitude": 48.5734, "longitude": 7.7521, "displayName": "Strasbourg, France" },
+    "montpellier": { "latitude": 43.6108, "longitude": 3.8767, "displayName": "Montpellier, France" },
+    "bordeaux": { "latitude": 44.8378, "longitude": -0.5792, "displayName": "Bordeaux, France" },
+    "lille": { "latitude": 50.6292, "longitude": 3.0573, "displayName": "Lille, France" },
+    "eyguieres": { "latitude": 43.695131, "longitude": 5.0297213, "displayName": "Eyguières, France" },
+    "mallemort": { "latitude": 43.7406, "longitude": 5.1825, "displayName": "Mallemort, France" },
+    "istres": { "latitude": 43.5139051, "longitude": 4.9884323, "displayName": "Istres, Bouches-du-Rhône, Provence-Alpes-Côte d'Azur, France métropolitaine, France" }
+}
