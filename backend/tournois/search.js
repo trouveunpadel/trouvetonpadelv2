@@ -18,112 +18,98 @@ class TournoisSearch {
     }
 
     // Recherche principale de tournois via l'API FFT
-    async searchTournaments({ city, date, radius = 30, level = 'all', coordinates }) {
-        try {
-            console.log(`🔍 Recherche FFT tournois padel pour ${city} le ${date} (rayon: ${radius}km)`);
-            
-            // Obtenir les coordonnées si pas fournies
-            let coords = coordinates;
-            if (!coords) {
-                coords = await this.getCoordinates(city);
+    async searchTournaments({ city, dateDebut, dateFin, radius = 30, level = 'all', coordinates }) {
+        console.log(`🔍 Recherche FFT: ${city}, ${dateDebut} -> ${dateFin}, rayon: ${radius}km, niveau: ${level}`);
+        
+        // Les coordonnées doivent être fournies
+        if (!coordinates || !coordinates.lat || !coordinates.lng) {
+            throw new Error('Coordonnées manquantes - lat et lng sont obligatoires');
+        }
+        
+        console.log(`📍 Coordonnées: ${coordinates.lat}, ${coordinates.lng}`);
+
+        let allTournaments = [];
+        let from = 0;
+        const size = 20; // Utiliser la même taille que dans le cURL
+        let hasMore = true;
+        let pageCount = 0;
+        const maxPages = 50; // Augmenter pour récupérer tous les résultats
+
+        while (hasMore && pageCount < maxPages) {
+            console.log(`📄 Récupération page ${pageCount + 1} (from: ${from}, size: ${size})`);
+
+            // Utiliser exactement la même structure que le cURL
+            const requestBody = {
+                "dateDebut": `${dateDebut}T00:00:00.000`,
+                "from": from,
+                "dateFin": `${dateFin}T00:00:00.000`,
+                "typePratique": ["PADEL"],
+                "size": size,
+                "traditionnel": {
+                    "tournoiInterne": false
+                },
+                "lat": coordinates.lat,
+                "lng": coordinates.lng,
+                "sort": ["dateDebut asc"],
+                "distance": radius,
+                "type": ["P", "S", "L"],
+                "include": [
+                    "code", "id", "epreuves.categorieAge", "libelle", "dateDebut", "dateFin",
+                    "installation", "inscriptionEnLigne", "prixLot", "paiementEnLigne",
+                    "paiementEnLigneObligatoire", "nomClub", "epreuves.dateClotureInscription",
+                    "epreuves.inscriptionEnLigne", "epreuves.inscriptionEnLigneEnCours",
+                    "epreuves.libelle", "epreuves.id", "epreuves.natureEpreuve", "nomLigue",
+                    "jugeArbitre", "courrielEngagement", "nomEngagement", "naturesTerrains",
+                    "adresse1Engagement", "adresse2Engagement", "codePostalEngagement",
+                    "villeEngagement", "prenomEngagement", "telPortableEngagement",
+                    "telBureauEngagement", "telDomicileEngagement", "type", "tournoiInterne",
+                    "nombreDeCourtExterieur", "nombreDeCourtInterieur", "communication",
+                    "modeleDeBalle", "prixEspece"
+                ]
+            };
+
+            const response = await axios.post('https://api.fft.fr/fft/v3/competition/tournois', requestBody, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.fft+json;',
+                    'Accept-Language': 'fr-FR,fr;q=0.9',
+                    'User-Agent': 'MAT/6263 CFNetwork/3826.500.131 Darwin/24.5.0',
+                    'X-APPLICATION-ID': 'tenup-app',
+                    'x-api-key': 'T4c59ZJboMxW65FIt4W9MhXN4dIKtraD',
+                    'Connection': 'keep-alive',
+                    'Cookie': 'AWSALB=979qclAkUGWaubmK3guMHF+c/2QDb2by/N5FPIJc9dWZidojxIxKUBysTXREM+BIxokNDtFK+qBaC0U4QSg3Ih7gU6TjSdcAZVig+ch3gNTC5BZjqaUtmx9bja/c; AWSALBCORS=979qclAkUGWaubmK3guMHF+c/2QDb2by/N5FPIJc9dWZidojxIxKUBysTXREM+BIxokNDtFK+qBaC0U4QSg3Ih7gU6TjSdcAZVig+ch3gNTC5BZjqaUtmx9bja/c; datadome=6tCqhxlhUKo55T7RcjuLjGjflRp_Fg_4Z_IRISFjwOVanCXMR7CJBZOqvPQmfjnzrv~3MLWO5Bi3Cyic2ANK1duzMSooD7JSfiKMFWcnd0ec5TY__RI4Y5G2TEr2Vo20; pa_vid=%22EDD42727-B0EF-49F4-9534-F90B3993AAC1%22'
+                }
+            });
+
+            if (!response.data || !response.data.hits) {
+                console.log('❌ Pas de données dans la réponse');
+                break;
             }
-            
-            const { lat, lng } = coords;
-            
-            const startDate = new Date(date);
-            const endDate = new Date(date);
-            endDate.setDate(endDate.getDate() + 30); // Recherche sur 30 jours
-            
-            // Récupérer tous les tournois avec pagination
-            let allTournaments = [];
-            let from = 0;
-            const pageSize = 100; // Augmenter la taille de page
-            let hasMore = true;
-            
-            while (hasMore) {
-                const requestBody = {
-                    "from": from,
-                    "dateFin": endDate.toISOString(),
-                    "distance": radius,
-                    "size": pageSize,
-                    "typePratique": ["PADEL"],
-                    "include": [
-                        "code", "id", "epreuves.categorieAge", "libelle", "dateDebut", "dateFin",
-                        "installation", "inscriptionEnLigne", "prixLot", "paiementEnLigne",
-                        "paiementEnLigneObligatoire", "nomClub", "epreuves.dateClotureInscription",
-                        "epreuves.inscriptionEnLigne", "epreuves.inscriptionEnLigneEnCours",
-                        "epreuves.libelle", "epreuves.id", "epreuves.natureEpreuve", "nomLigue",
-                        "jugeArbitre", "courrielEngagement", "nomEngagement", "naturesTerrains",
-                        "adresse1Engagement", "adresse2Engagement", "codePostalEngagement",
-                        "villeEngagement", "prenomEngagement", "telPortableEngagement",
-                        "telBureauEngagement", "telDomicileEngagement", "type", "tournoiInterne",
-                        "nombreDeCourtExterieur", "nombreDeCourtInterieur", "communication",
-                        "modeleDeBalle", "prixEspece"
-                    ],
-                    "dateDebut": startDate.toISOString(),
-                    "lat": lat,
-                    "traditionnel": {
-                        "tournoiInterne": false
-                    },
-                    "lng": lng,
-                    "sort": ["_DIST_"],
-                    "type": []
-                };
 
-                const response = await axios.post(this.apiUrl, requestBody, {
-                    headers: {
-                        ...this.headers,
-                        'Cookie': this.cookies
-                    }
-                });
+            const pageResults = response.data.hits;
+            console.log(`📊 Page ${pageCount + 1}: ${pageResults.length} tournois récupérés`);
 
-                const hits = response.data?.hits || [];
-                console.log(`✅ API FFT page ${Math.floor(from/pageSize) + 1}: ${hits.length} tournois trouvés`);
+            if (pageResults.length === 0) {
+                hasMore = false;
+            } else {
+                allTournaments = allTournaments.concat(pageResults);
+                from += size;
+                pageCount++;
                 
-                if (hits.length === 0) {
+                // Si on a récupéré moins que la taille de page, c'est la dernière page
+                if (pageResults.length < size) {
                     hasMore = false;
-                } else {
-                    allTournaments = allTournaments.concat(hits);
-                    from += pageSize;
-                    
-                    // Sécurité : limiter à 10 pages max (1000 tournois)
-                    if (from >= 1000) {
-                        console.log('⚠️ Limite de 1000 tournois atteinte');
-                        hasMore = false;
-                    }
-                    
-                    // Si on a moins de résultats que demandé, c'est la dernière page
-                    if (hits.length < pageSize) {
-                        hasMore = false;
-                    }
                 }
             }
-
-            console.log(`📊 Total FFT: ${allTournaments.length} tournois trouvés sur toutes les pages`);
-            
-            if (allTournaments.length === 0) {
-                return [];
-            }
-
-            // Debug: vérifier la structure des données reçues
-            if (allTournaments.length > 0) {
-                console.log('🔍 Premier hit:', Object.keys(allTournaments[0]));
-                console.log('🔍 Structure complète du premier hit:', JSON.stringify(allTournaments[0], null, 2));
-            }
-
-            // Transformer les données FFT en format standardisé
-            const tournaments = this.transformFFTData(allTournaments, level);
-            
-            console.log(`📊 ${tournaments.length} tournois après filtrage par niveau`);
-            return tournaments;
-        } catch (error) {
-            console.error('❌ Erreur API FFT:', error.message);
-            if (error.response) {
-                console.error('Status:', error.response.status);
-                console.error('Data:', error.response.data);
-            }
-            throw new Error(`Erreur lors de la recherche FFT: ${error.message}`);
         }
+
+        console.log(`📊 Total récupéré: ${allTournaments.length} tournois sur ${pageCount} pages`);
+
+        // Transformer les données FFT
+        const tournaments = this.transformFFTData(allTournaments, level);
+        console.log(`📊 ${tournaments.length} tournois après filtrage par niveau`);
+
+        return tournaments;
     }
 
     // Transformer les données FFT en format standardisé
@@ -345,17 +331,9 @@ class TournoisSearch {
 
     // Obtenir les coordonnées d'une ville (à implémenter avec une API de géocodage)
     async getCoordinates(city) {
-        // Pour le moment, retourner des coordonnées par défaut (Paris)
-        // À remplacer par une vraie API de géocodage
-        const defaultCoordinates = {
-            'paris': { lat: 48.8566, lng: 2.3522 },
-            'lyon': { lat: 45.7640, lng: 4.8357 },
-            'marseille': { lat: 43.2965, lng: 5.3698 },
-            'toulouse': { lat: 43.6047, lng: 1.4442 },
-            'nice': { lat: 43.7102, lng: 7.2620 }
-        };
-        
-        return defaultCoordinates[city.toLowerCase()] || defaultCoordinates['paris'];
+        // Plus de coordonnées hardcodées - les coordonnées doivent être fournies en paramètre
+        // ou récupérées via une API de géocodage côté frontend
+        return null;
     }
 }
 
