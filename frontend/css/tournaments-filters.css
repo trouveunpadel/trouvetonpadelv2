@@ -1,0 +1,332 @@
+/**
+ * Styles pour les filtres de la page tournaments.html
+ * Partie du projet TrouveTonPadel
+ */
+
+/* Ajustement de l'espacement entre le header et le contenu principal */
+#results-section {
+    padding-top: 6rem; /* Valeur par défaut pour les grands écrans */
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 0;
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.filter-header {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--bs-primary);
+    margin-bottom: 0.25rem;
+}
+
+.filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filter-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.8rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.02em;
+}
+
+.filter-btn:hover {
+    background: rgba(var(--bs-primary-rgb), 0.2);
+    border-color: rgba(var(--bs-primary-rgb), 0.3);
+    color: white;
+}
+
+.btn-check:checked + .filter-btn {
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #000;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(var(--bs-primary-rgb), 0.4);
+}
+
+/* Style des titres de tournois */
+.tournament-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin-right: 8px;
+    color: #ffffff;
+}
+
+/* Ajustement de la carte de tournoi */
+.tournament-card .card-body {
+    padding: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.tournament-content {
+    flex-grow: 1;
+}
+
+.tournament-footer {
+    margin-top: auto;
+}
+
+.tournament-category-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    /* Ajustement de l'espacement pour mobiles */
+    #results-section {
+        padding-top: 4rem;
+    }
+    
+    .filter-container {
+        padding: 1rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    /* Ajustement de l'espacement pour tablettes */
+    #results-section {
+        padding-top: 4.5rem;
+    }
+    
+    .filter-container {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 0.4rem;
+        padding: 0.6rem;
+    }
+    
+    .filter-section {
+        flex: 1;
+        max-width: 50%;
+    }
+    
+    .filter-header {
+        font-size: 0.8rem;
+        margin-bottom: 0.15rem;
+    }
+    
+    .filter-options {
+        gap: 0.15rem;
+        flex-wrap: nowrap;
+    }
+    
+    .filter-btn {
+        padding: 0.2rem 0.35rem;
+        font-size: 0.7rem;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        min-width: 0;
+    }
+    
+    /* Spécifique aux catégories pour qu'elles tiennent sur une ligne */
+    .category-options {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+    
+    .category-options .filter-btn {
+        padding: 0.2rem 0.35rem;
+        font-size: 0.7rem;
+        min-width: 0;
+    }
+}
+
+@media (min-width: 992px) {
+    /* Ajustement de l'espacement pour grands écrans */
+    #results-section {
+        padding-top: 5.5rem;
+    }
+    
+    .filter-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .filter-section {
+        flex: 1;
+    }
+}
+
+/* Correction pour le header à 768px */
+@media (max-width: 991px) {
+    .navbar {
+        padding: 0.5rem 0;
+    }
+    
+    .navbar .container {
+        padding: 0 0.5rem;
+    }
+    
+    .navbar-left, .navbar-right {
+        flex: 1;
+    }
+    
+    .navbar-right {
+        justify-content: flex-end;
+    }
+    
+    .navbar h5 {
+        font-size: 0.9rem;
+        margin-right: 0.5rem !important;
+    }
+    
+    .navbar .btn-outline-light {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .navbar .badge {
+        font-size: 0.75rem !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .navbar .container .d-flex.justify-content-between {
+        justify-content: center !important;
+    }
+    
+    .navbar-left, .navbar-right {
+        justify-content: center;
+        margin: 0.25rem 0;
+    }
+}
+
+/* --- Gestion de la visibilité des filtres Desktop vs Mobile --- */
+.tournament-filters-mobile {
+    display: none; /* Caché par défaut */
+}
+
+.tournament-filters-desktop {
+    display: flex; /* Visible par défaut (flex car c'est le display de .filter-container) */
+}
+
+/* --- Styles pour les filtres mobiles (<= 500px) --- */
+@media (max-width: 500px) {
+    /* Masquer des éléments du header en mode mobile étroit */
+    .navbar-left span.badge {
+        display: none !important;
+    }
+
+    .navbar-right h5 {
+        display: none !important;
+    }
+
+    .tournament-filters-desktop {
+        display: none !important; /* Cacher les filtres desktop */
+    }
+
+    .tournament-filters-mobile {
+        display: flex !important; /* Afficher les filtres mobiles */
+        flex-direction: column;
+        background-color: #121212; /* Fond noir/très sombre comme sur l'image */
+        padding: 10px;
+        border-radius: 12px;
+        gap: 10px; /* Espace entre le toggle genre et les boutons catégorie */
+    }
+
+    .tournament-filters-mobile .mobile-genre-toggle {
+        display: flex;
+        justify-content: space-around; /* Ou space-between si vous préférez */
+        background-color: #222; /* Fond du conteneur toggle */
+        border-radius: 8px;
+        padding: 5px;
+    }
+
+    /* Styles pour les boutons à l'intérieur du toggle de genre */
+    .tournament-filters-mobile .mobile-genre-toggle .filter-btn {
+        flex-grow: 1;
+        text-align: center;
+        background-color: transparent; /* Boutons transparents par défaut */
+        color: #ccc;
+        border: none; /* Pas de bordure pour les boutons du toggle */
+        padding: 8px 5px; /* Padding ajusté pour le toggle */
+        border-radius: 6px; /* Coins arrondis pour les boutons du toggle */
+        font-size: 13px;
+        font-weight: 500; /* Un peu plus de poids pour la lisibilité */
+        transition: background-color 0.2s ease, color 0.2s ease;
+        cursor: pointer;
+        line-height: 1.2; /* Assurer un bon alignement vertical du texte */
+        margin: 0 2px; /* Petit espace entre les boutons du toggle */
+    }
+
+    .tournament-filters-mobile .mobile-genre-toggle input.btn-check:checked + .filter-btn {
+        background-color: #C6FF00 !important; /* Fond vert lime (comme les catégories actives) */
+        color: #000000 !important; /* Texte noir (comme les catégories actives) */
+        border-color: #C6FF00 !important; /* Assurer la cohérence de la bordure si applicable */
+        font-weight: 500 !important; /* Cohérence du poids de la police */
+    }
+
+    .tournament-filters-mobile .mobile-category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px; /* Espace entre les boutons de catégorie */
+        justify-content: center; /* Centrer les boutons s'ils ne remplissent pas la ligne */
+    }
+
+    /* Styles pour les boutons de catégorie */
+    .tournament-filters-mobile .mobile-category-buttons .filter-btn {
+        background-color: #303030; /* Fond gris foncé */
+        color: #bbb; /* Texte gris clair */
+        border: 1px solid #484848; /* Bordure subtile */
+        padding: 8px 12px; /* Padding pour les boutons de catégorie */
+        border-radius: 6px; /* Coins arrondis */
+        font-size: 12px;
+        font-weight: 400;
+        transition: all 0.2s ease;
+        flex-basis: calc(33.333% - 6px); /* Environ 3 boutons par ligne, ajuster le 6px si le gap change */
+        text-align: center;
+        cursor: pointer;
+        line-height: 1.3;
+    }
+
+    .tournament-filters-mobile .mobile-category-buttons input.btn-check:checked + .filter-btn {
+        background-color: #C6FF00 !important; /* Fond vert lime */
+        color: #000000 !important; /* Texte noir */
+        border-color: #C6FF00 !important; /* Bordure vert lime */
+        font-weight: 500 !important;
+    }
+
+    /* Réduire l'espacement vertical entre les cartes de tournoi en mobile */
+    body #tournament-results-container.row > .col-12.col-md-6.col-lg-4.mb-4 {
+        margin-bottom: 10px !important; /* Espacement minimal en bas */
+    }
+
+    /* Réduire également le gutter vertical (espacement en haut) de la rangée en mobile */
+    body #tournament-results-container.row.g-4 {
+        --bs-gutter-y: 0.25rem !important; /* Réduit le margin-top des cartes induit par g-4 */
+    }
+}

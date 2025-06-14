@@ -10,30 +10,104 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/results.css">
     <link rel="stylesheet" href="css/ui-components.css">
+    <link rel="stylesheet" href="css/tournaments-filters.css">
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-modern fixed-top">
             <div class="container">
-                <div class="d-flex justify-content-between align-items-center w-100">
-                    <a href="index.html" class="navbar-brand me-3">
-                        <img src="images/logo/logo_white.png" alt="TrouveTonPadel" height="40">
-                    </a>
-                    <div class="d-flex align-items-center">
-                                                <a href="index.html#tournois" class="btn btn-outline-light">Nouvelle recherche</a>
+                <div class="d-flex justify-content-between align-items-center w-100 flex-wrap">
+                    <div class="d-flex align-items-center navbar-left">
+                        <a href="index.html" class="navbar-brand me-2">
+                            <img src="images/logo/logo_white.png" alt="TrouveTonPadel" height="40">
+                        </a>
+                        <span class="badge bg-primary fs-6"><span id="results-count">0</span> résultats</span>
+                    </div>
+                    <div class="d-flex align-items-center navbar-right">
+                        <h5 class="text-white me-3 mb-0">Résultats des <span class="text-primary">Tournois</span></h5>
+                        <a href="index.html#tournois" class="btn btn-outline-light">Nouvelle recherche</a>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main class="container mt-5 pt-5">
-        <section id="results-section" class="py-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="mb-0">Résultats des tournois</h1>
-                <span class="badge bg-primary fs-6"><span id="results-count">0</span> résultats</span>
+    <main class="container">
+        <section id="results-section" class="pt-2 pb-5">
+            <!-- Le compteur de résultats a été déplacé dans le header -->
+            <!-- Filtres Desktop (visible > 500px) -->
+            <div class="tournament-filters-desktop filter-container mb-4">
+                <div class="filter-section">
+                    <div class="filter-header">
+                        <i class="bi bi-funnel-fill me-1"></i>
+                        <span>Genre</span>
+                    </div>
+                    <div class="filter-options">
+                        <input type="checkbox" class="btn-check" name="genreFilter" id="genreMixteDesktop" value="Mixte" autocomplete="off">
+                        <label class="filter-btn" for="genreMixteDesktop">Mixte</label>
+
+                        <input type="checkbox" class="btn-check" name="genreFilter" id="genreHommesDesktop" value="Hommes" autocomplete="off">
+                        <label class="filter-btn" for="genreHommesDesktop">Hommes</label>
+
+                        <input type="checkbox" class="btn-check" name="genreFilter" id="genreFemmesDesktop" value="Femmes" autocomplete="off">
+                        <label class="filter-btn" for="genreFemmesDesktop">Femmes</label>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <div class="filter-header">
+                        <i class="bi bi-trophy-fill me-1"></i>
+                        <span>Catégorie</span>
+                    </div>
+                    <div class="filter-options category-options">
+                        <input type="checkbox" class="btn-check" name="categoryFilter" id="categoryP25Desktop" value="P25" autocomplete="off">
+                        <label class="filter-btn" for="categoryP25Desktop">P25</label>
+
+                        <input type="checkbox" class="btn-check" name="categoryFilter" id="categoryP100Desktop" value="P100" autocomplete="off">
+                        <label class="filter-btn" for="categoryP100Desktop">P100</label>
+                        
+                        <input type="checkbox" class="btn-check" name="categoryFilter" id="categoryP250Desktop" value="P250" autocomplete="off">
+                        <label class="filter-btn" for="categoryP250Desktop">P250</label>
+
+                        <input type="checkbox" class="btn-check" name="categoryFilter" id="categoryP500Desktop" value="P500" autocomplete="off">
+                        <label class="filter-btn" for="categoryP500Desktop">P500</label>
+
+                        <input type="checkbox" class="btn-check" name="categoryFilter" id="categoryP1000Desktop" value="P1000" autocomplete="off">
+                        <label class="filter-btn" for="categoryP1000Desktop">P1000</label>
+                    </div>
+                </div>
             </div>
-            <p id="search-summary" class="lead text-muted"></p>
+
+            <!-- Filtres Mobile (visible <= 500px) -->
+            <div class="tournament-filters-mobile mb-4">
+                <div class="mobile-genre-toggle">
+                    <input type="radio" class="btn-check" name="genreFilter" id="genreHommesMobile" value="Hommes" autocomplete="off" checked>
+                    <label class="filter-btn" for="genreHommesMobile">Hommes</label>
+
+                    <input type="radio" class="btn-check" name="genreFilter" id="genreFemmesMobile" value="Femmes" autocomplete="off">
+                    <label class="filter-btn" for="genreFemmesMobile">Femmes</label>
+
+                    <input type="radio" class="btn-check" name="genreFilter" id="genreMixteMobile" value="Mixte" autocomplete="off">
+                    <label class="filter-btn" for="genreMixteMobile">Mixte</label>
+                </div>
+                <div class="mobile-category-buttons">
+                    <input type="checkbox" class="btn-check" name="categoryFilter" id="categoryP25Mobile" value="P25" autocomplete="off">
+                    <label class="filter-btn" for="categoryP25Mobile">P25</label>
+
+                    <input type="checkbox" class="btn-check" name="categoryFilter" id="categoryP100Mobile" value="P100" autocomplete="off">
+                    <label class="filter-btn" for="categoryP100Mobile">P100</label>
+                    
+                    <input type="checkbox" class="btn-check" name="categoryFilter" id="categoryP250Mobile" value="P250" autocomplete="off">
+                    <label class="filter-btn" for="categoryP250Mobile">P250</label>
+
+                    <input type="checkbox" class="btn-check" name="categoryFilter" id="categoryP500Mobile" value="P500" autocomplete="off">
+                    <label class="filter-btn" for="categoryP500Mobile">P500</label>
+
+                    <input type="checkbox" class="btn-check" name="categoryFilter" id="categoryP1000Mobile" value="P1000" autocomplete="off">
+                    <label class="filter-btn" for="categoryP1000Mobile">P1000</label>
+                </div>
+            </div>
+            <!-- Fin Filtres -->
 
             <div id="loading-indicator" class="text-center py-5">
                 <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
@@ -57,12 +131,12 @@
             </div>
 
             <div id="tournament-results-container" class="row g-4">
-                <!-- Les cartes de résultats des tournois seront injectées ici par JavaScript -->
+                
             </div>
         </section>
     </main>
 
-    <footer class="footer py-2 bg-black border-top border-dark fixed-bottom">
+    <footer class="footer py-2 bg-black border-top border-dark">
         <div class="container text-center">
             <span class="text-muted small">© 2025 TrouveTonPadel</span>
         </div>
